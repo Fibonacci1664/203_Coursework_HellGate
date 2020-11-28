@@ -12,12 +12,20 @@ Scene::Scene(Input *in)
 	
 
 	// Initialise scene variables
-	
+	initCamera();
+	initSkySphere();	
+}
+
+Scene::~Scene()
+{
+	delete cam;
+	delete skySphere;
 }
 
 void Scene::handleInput(float dt)
 {
 	// Handle user input
+	cam->handleInput(dt);
 }
 
 void Scene::update(float dt)
@@ -26,22 +34,31 @@ void Scene::update(float dt)
 
 	// Calculate FPS for output
 	calculateFPS();
+	cam->update(dt);
+	skySphere->update(dt);
 }
 
-void Scene::render() {
-
+void Scene::render()
+{
 	// Clear Color and Depth Buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Reset transformations
 	glLoadIdentity();
 	// Set the camera
-	gluLookAt(0.0f, 0.0f, 6.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	//gluLookAt(0.0f, 0.0f, 6.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	gluLookAt(cam->getPos().x, cam->getPos().y, cam->getPos().z,
+		cam->getLookAt().x, cam->getLookAt().y, cam->getLookAt().z,
+		cam->getUp().x, cam->getUp().y, cam->getUp().z);
 	
 	// Render geometry/scene here -------------------------------------
+
+	// Render a unit skysphere around the camera.
+	glPushMatrix();
+		glTranslatef(cam->getPos().x, cam->getPos().y, cam->getPos().z);
+		skySphere->render();
+	glPopMatrix();
 	
-
-
 	// End render geometry --------------------------------------
 
 	// Render text, should be last object rendered.
@@ -55,7 +72,8 @@ void Scene::initialiseOpenGL()
 {
 	//OpenGL settings
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
+	//glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
+	glClearColor(0, 0, 0, 1.0f);			// Cornflour Blue Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glClearStencil(0);									// Clear stencil buffer
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
@@ -63,6 +81,36 @@ void Scene::initialiseOpenGL()
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 	glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
 }
+
+//////////////////////////////////////////////////////////// CAMERA STUFF ////////////////////////////////////////////////////////////
+
+void Scene::initCamera()
+{
+	cam = new Camera(input);
+	cam->setWindowWidth(&width);
+	cam->setWindowHeight(&height);
+}
+
+//////////////////////////////////////////////////////////// SKYSPHERE STUFF //////////////////////////////////////////////////////////
+
+void Scene::initSkySphere()
+{
+	skySphere = new SkySphere();
+}
+
+//////////////////////////////////////////////////////////// TEXTURE STUFF ////////////////////////////////////////////////////////////
+
+void Scene::enableTextures()
+{
+	glEnable(GL_TEXTURE_2D);
+}
+
+void Scene::disableTextures()
+{
+	glDisable(GL_TEXTURE_2D);
+}
+
+//////////////////////////////////////////////////////////// GENERAL SCENE STUFF //////////////////////////////////////////////////////
 
 // Handles the resize of the window. If the window changes size the perspective matrix requires re-calculation to match new window size.
 void Scene::resize(int w, int h) 
@@ -134,10 +182,12 @@ void Scene::displayText(float x, float y, float r, float g, float b, char* strin
 	// Set text colour and position.
 	glColor3f(r, g, b);
 	glRasterPos2f(x, y);
+
 	// Render text.
 	for (int i = 0; i < j; i++) {
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, string[i]);
 	}
+
 	// Reset colour to white.
 	glColor3f(1.f, 1.f, 1.f);
 

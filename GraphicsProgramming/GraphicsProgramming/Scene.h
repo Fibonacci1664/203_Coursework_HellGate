@@ -15,12 +15,16 @@
 // Further includes should go here:
 #include "SOIL.h"
 #include <vector>
+#include "Camera.h"
+#include "SkySphere.h"
 
 
-class Scene{
+class Scene
+{
 
 public:
 	Scene(Input *in);
+	~Scene();
 	// Main render function
 	void render();
 	// Handle input function that receives delta time from parent.
@@ -39,6 +43,7 @@ protected:
 	void renderTextOutput();
 	void calculateFPS();
 
+
 	// draw primitive functions
 	
 
@@ -54,6 +59,24 @@ protected:
 	char fps[40];
 	char mouseText[40];
 
+	////////////////////////////////// CAMERA STUFF //////////////////////////////////
+	// CAMERA FUNCS
+	void initCamera();
+
+	// CAMERA VARS
+	Camera* cam;
+
+	////////////////////////////////// SKYSPHERE STUFF ///////////////////////////////
+	// SKYSPHERE FUNCS
+	void initSkySphere();
+	
+	// SKYSPHERE VARS
+	SkySphere* skySphere;
+	
+	////////////////////////////////// TEXTURE STUFF //////////////////////////////////
+	// TEXTURE FUNCS
+	void enableTextures();
+	void disableTextures();
 };
 
 #endif
