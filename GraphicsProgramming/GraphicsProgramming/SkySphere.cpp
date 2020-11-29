@@ -9,7 +9,7 @@ SkySphere::SkySphere(float radius, float slices, float stacks)
 	m_quadric = gluNewQuadric();
 	initSkySphere(radius, slices, stacks);
 	m_rotation = 0;
-	m_speed = 0.25;
+	m_speed = 0.5f;
 	m_isSet = false;
 }
 
@@ -28,6 +28,10 @@ void SkySphere::render()
 	glPushMatrix();		
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_TEXTURE_2D);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glBindTexture(GL_TEXTURE_2D, m_texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	// Takes care of horrible seams on the texture mapping.
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);	// Takes care of horrible seams on the texture mapping.				
 		glRotatef(m_rotation, 0.5f, 0.5f, 0);
 		glCallList(m_sphereList);
 		glDisable(GL_TEXTURE_2D);
@@ -37,9 +41,7 @@ void SkySphere::render()
 
 void SkySphere::initSkySphere(float radius, float slices, float stacks)
 {
-	m_skySpherePath = "gfx/skyspheres/starmap_8k.jpg";
-
-	initTextures(m_skySpherePath);
+	initTextures(m_skySphereTexPath);
 
 	m_sphereList = glGenLists(1);
 
@@ -63,10 +65,7 @@ void SkySphere::initTextures(char* filepath)
 	{
 		printf("SOIL loading error: '%s'\n", SOIL_last_result());
 	}
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	// Takes care of horrible seams on the texture mapping.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);	// Takes care of horrible seams on the texture mapping.
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	
 	gluQuadricTexture(m_quadric, GLU_TRUE);									// Generate texture coords.
 }
 

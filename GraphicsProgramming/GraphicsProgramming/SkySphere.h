@@ -30,6 +30,6 @@ private:
 	bool m_isSet;
 
 	// TEXTURE VARS
-	char* m_skySpherePath;
+	char* m_skySphereTexPath = "gfx/skyspheres/starmap_8k.jpg";
 };
 

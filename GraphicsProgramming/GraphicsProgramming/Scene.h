@@ -17,6 +17,8 @@
 #include <vector>
 #include "Camera.h"
 #include "SkySphere.h"
+#include "Model.h"
+#include "Ground.h"
 
 
 class Scene
@@ -42,9 +44,9 @@ protected:
 	// A function to collate all text output in a single location
 	void renderTextOutput();
 	void calculateFPS();
+	void toggleWireFrame();
 
-
-	// draw primitive functions
+	bool wireFrame;
 	
 
 	// For access to user input.
@@ -77,6 +79,16 @@ protected:
 	// TEXTURE FUNCS
 	void enableTextures();
 	void disableTextures();
+
+	////////////////////////////////// LOADED MODEL STUFF /////////////////////////////
+
+	////////////////////////////////// GROUND MODEL STUFF /////////////////////////////
+
+	// GROUND MODEL VARS
+	Ground* ground;
+
+	// GROUND MODEL FUNCS
+	void initGround();
 };
 
 #endif

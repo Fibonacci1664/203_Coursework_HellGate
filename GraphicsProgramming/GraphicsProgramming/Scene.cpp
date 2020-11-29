@@ -12,20 +12,24 @@ Scene::Scene(Input *in)
 	
 
 	// Initialise scene variables
+	wireFrame = false;
 	initCamera();
-	initSkySphere();	
+	initSkySphere();
+	initGround();
 }
 
 Scene::~Scene()
 {
 	delete cam;
 	delete skySphere;
+	delete ground;
 }
 
 void Scene::handleInput(float dt)
 {
 	// Handle user input
 	cam->handleInput(dt);
+	toggleWireFrame();
 }
 
 void Scene::update(float dt)
@@ -57,6 +61,11 @@ void Scene::render()
 	glPushMatrix();
 		glTranslatef(cam->getPos().x, cam->getPos().y, cam->getPos().z);
 		skySphere->render();
+	glPopMatrix();
+
+	// Render a plane of cobble stone ground.
+	glPushMatrix();
+		ground->render();
 	glPopMatrix();
 	
 	// End render geometry --------------------------------------
@@ -110,7 +119,33 @@ void Scene::disableTextures()
 	glDisable(GL_TEXTURE_2D);
 }
 
+//////////////////////////////////////////////////////////// LOADED MODEL STUFF ///////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// GROUND MODEL STUFF ///////////////////////////////////////////////////////
+
+void Scene::initGround()
+{
+	ground = new Ground();
+}
+
 //////////////////////////////////////////////////////////// GENERAL SCENE STUFF //////////////////////////////////////////////////////
+
+void Scene::toggleWireFrame()
+{
+	if (input->isKeyDown('p') && !wireFrame)
+	{
+		glPolygonMode(GL_FRONT, GL_LINE);
+		wireFrame = true;
+		input->setKeyUp('p');
+	}
+
+	if (input->isKeyDown('p') && wireFrame)
+	{
+		glPolygonMode(GL_FRONT, GL_FILL);
+		wireFrame = false;
+		input->setKeyUp('p');
+	}
+}
 
 // Handles the resize of the window. If the window changes size the perspective matrix requires re-calculation to match new window size.
 void Scene::resize(int w, int h) 
