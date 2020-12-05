@@ -21,15 +21,14 @@ private:
 	void initSkySphere(float radius, float slices, float stacks);
 	void initTextures(char* filepath);
 
-	GLuint m_texture;
 	GLuint m_sphereList;
 	GLUquadric* m_quadric;
 
 	float m_rotation;
 	float m_speed;
-	bool m_isSet;
 
 	// TEXTURE VARS
+	GLuint m_texture;
 	char* m_skySphereTexPath = "gfx/skyspheres/starmap_8k.jpg";
 };
 

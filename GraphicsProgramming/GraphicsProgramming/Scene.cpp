@@ -16,6 +16,7 @@ Scene::Scene(Input *in)
 	initCamera();
 	initSkySphere();
 	initGround();
+	initPlanetarySystem();
 }
 
 Scene::~Scene()
@@ -35,11 +36,12 @@ void Scene::handleInput(float dt)
 void Scene::update(float dt)
 {
 	// update scene related variables.
+	cam->update(dt);
+	skySphere->update(dt);
+	planet->update(dt);
 
 	// Calculate FPS for output
 	calculateFPS();
-	cam->update(dt);
-	skySphere->update(dt);
 }
 
 void Scene::render()
@@ -67,6 +69,11 @@ void Scene::render()
 	glPushMatrix();
 		ground->render();
 	glPopMatrix();
+
+	// Render a spinning planet
+	glPushMatrix();
+		planet->render();
+	glPopMatrix();
 	
 	// End render geometry --------------------------------------
 
@@ -82,7 +89,7 @@ void Scene::initialiseOpenGL()
 	//OpenGL settings
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 	//glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
-	glClearColor(0, 0, 0, 1.0f);			// Cornflour Blue Background
+	glClearColor(0, 0, 0, 1.0f);						// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glClearStencil(0);									// Clear stencil buffer
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
@@ -105,6 +112,13 @@ void Scene::initCamera()
 void Scene::initSkySphere()
 {
 	skySphere = new SkySphere(1, 50, 50);
+}
+
+//////////////////////////////////////////////////////////// SPHERE STUFF /////////////////////////////////////////////////////////////
+
+void Scene::initPlanetarySystem()
+{
+	planet = new Sphere(10, 30, 30);
 }
 
 //////////////////////////////////////////////////////////// TEXTURE STUFF ////////////////////////////////////////////////////////////
@@ -137,6 +151,7 @@ void Scene::toggleWireFrame()
 		glPolygonMode(GL_FRONT, GL_LINE);
 		wireFrame = true;
 		input->setKeyUp('p');
+		planet->setWireFrameMode(true);
 	}
 
 	if (input->isKeyDown('p') && wireFrame)
@@ -144,6 +159,7 @@ void Scene::toggleWireFrame()
 		glPolygonMode(GL_FRONT, GL_FILL);
 		wireFrame = false;
 		input->setKeyUp('p');
+		planet->setWireFrameMode(false);
 	}
 }
 
@@ -160,7 +176,7 @@ void Scene::resize(int w, int h)
 	float ratio = (float)w / (float)h;
 	fov = 45.0f;
 	nearPlane = 0.1f;
-	farPlane = 100.0f;
+	farPlane = 500.0f;
 
 	// Use the Projection Matrix
 	glMatrixMode(GL_PROJECTION);

@@ -19,6 +19,7 @@
 #include "SkySphere.h"
 #include "Model.h"
 #include "Ground.h"
+#include "Sphere.h"
 
 
 class Scene
@@ -48,7 +49,6 @@ protected:
 
 	bool wireFrame;
 	
-
 	// For access to user input.
 	Input* input;
 		
@@ -74,6 +74,13 @@ protected:
 	
 	// SKYSPHERE VARS
 	SkySphere* skySphere;
+
+	////////////////////////////////// SPHERE STUFF ///////////////////////////////
+	// SPHERE FUNCS
+	void initPlanetarySystem();
+
+	// SPHERE VARS
+	Sphere* planet;
 	
 	////////////////////////////////// TEXTURE STUFF //////////////////////////////////
 	// TEXTURE FUNCS
