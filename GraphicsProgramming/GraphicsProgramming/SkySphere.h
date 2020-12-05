@@ -31,4 +31,3 @@ private:
 	GLuint m_texture;
 	char* m_skySphereTexPath = "gfx/skyspheres/starmap_8k.jpg";
 };
-

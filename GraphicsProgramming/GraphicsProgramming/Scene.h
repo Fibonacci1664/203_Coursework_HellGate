@@ -47,7 +47,7 @@ protected:
 	void calculateFPS();
 	void toggleWireFrame();
 
-	bool wireFrame;
+	bool m_wireFrame;
 	
 	// For access to user input.
 	Input* input;
@@ -78,9 +78,17 @@ protected:
 	////////////////////////////////// SPHERE STUFF ///////////////////////////////
 	// SPHERE FUNCS
 	void initPlanetarySystem();
+	void renderPlanetarySystem();
 
 	// SPHERE VARS
 	Sphere* planet;
+	Sphere* moon;
+	Sphere* moonOfMoon;
+	char* m_moonTexPath = "gfx/textures/4k_moon_fic.jpg";
+	char* m_moonOfMoonTexPath = "gfx/textures/redMoon.jpg";
+	char* m_alienWorldTexPath = "gfx/textures/alien_world.png";
+	float m_planetRotation;
+	float m_planetRotationSpeed;
 	
 	////////////////////////////////// TEXTURE STUFF //////////////////////////////////
 	// TEXTURE FUNCS

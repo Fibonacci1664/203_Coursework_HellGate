@@ -12,7 +12,9 @@ Scene::Scene(Input *in)
 	
 
 	// Initialise scene variables
-	wireFrame = false;
+	m_wireFrame = false;
+	m_planetRotation = 0;
+	m_planetRotationSpeed = 5.0f;
 	initCamera();
 	initSkySphere();
 	initGround();
@@ -35,10 +37,11 @@ void Scene::handleInput(float dt)
 
 void Scene::update(float dt)
 {
+	m_planetRotation += (m_planetRotationSpeed * dt);
+
 	// update scene related variables.
 	cam->update(dt);
 	skySphere->update(dt);
-	planet->update(dt);
 
 	// Calculate FPS for output
 	calculateFPS();
@@ -70,11 +73,9 @@ void Scene::render()
 		ground->render();
 	glPopMatrix();
 
-	// Render a spinning planet
-	glPushMatrix();
-		planet->render();
-	glPopMatrix();
-	
+	// Render a planetary system
+	renderPlanetarySystem();
+
 	// End render geometry --------------------------------------
 
 	// Render text, should be last object rendered.
@@ -118,7 +119,31 @@ void Scene::initSkySphere()
 
 void Scene::initPlanetarySystem()
 {
-	planet = new Sphere(10, 30, 30);
+	planet = new Sphere(12, 30, 30, m_alienWorldTexPath);
+	moon = new Sphere(3, 10, 10, m_moonTexPath);
+	moonOfMoon = new Sphere(1, 10, 10, m_moonOfMoonTexPath);
+}
+
+void Scene::renderPlanetarySystem()
+{
+	glPushMatrix();
+		glTranslatef(0, 100.0f, -200.0f);
+		glRotatef(-23.5f, 0, 0, 1.0f);
+		glRotatef(m_planetRotation, 0, 1.0f, 0);
+		planet->render();
+
+		glPushMatrix();
+			glTranslatef(48.0f, 0, 0);
+			glRotatef(m_planetRotation * 2, 0, 1.0f, 0);
+			moon->render();
+
+			glPushMatrix();
+				glTranslatef(12.0f, 0, 0);
+				glRotatef(m_planetRotation * 3, 0, 0, 1.0f);
+				moonOfMoon->render();
+			glPopMatrix();
+		glPopMatrix();
+	glPopMatrix();
 }
 
 //////////////////////////////////////////////////////////// TEXTURE STUFF ////////////////////////////////////////////////////////////
@@ -146,20 +171,24 @@ void Scene::initGround()
 
 void Scene::toggleWireFrame()
 {
-	if (input->isKeyDown('p') && !wireFrame)
+	if (input->isKeyDown('p') && !m_wireFrame)
 	{
 		glPolygonMode(GL_FRONT, GL_LINE);
-		wireFrame = true;
+		m_wireFrame = true;
 		input->setKeyUp('p');
 		planet->setWireFrameMode(true);
+		moon->setWireFrameMode(true);
+		moonOfMoon->setWireFrameMode(true);
 	}
 
-	if (input->isKeyDown('p') && wireFrame)
+	if (input->isKeyDown('p') && m_wireFrame)
 	{
 		glPolygonMode(GL_FRONT, GL_FILL);
-		wireFrame = false;
+		m_wireFrame = false;
 		input->setKeyUp('p');
 		planet->setWireFrameMode(false);
+		moon->setWireFrameMode(false);
+		moonOfMoon->setWireFrameMode(false);
 	}
 }
 

@@ -5,11 +5,9 @@ constexpr auto GL_CLAMP_TO_EDGE = 0x812F;
 
 // Constructor, maybe change this to render just a basic sphere then have separate func to call
 // for setting things like translate, rotate, colour etc.
-Sphere::Sphere(float radius, float slices, float stacks)
+Sphere::Sphere(float radius, int slices, int stacks, char* filepath)
 {
-	initSphere(radius, slices, stacks);
-	m_rotation = 0;
-	m_speed = 5.0f;
+	initSphere(radius, slices, stacks, filepath);
 	m_wireFrame = false;
 }
 
@@ -21,7 +19,7 @@ Sphere::~Sphere()
 
 void Sphere::update(float dt)
 {
-	m_rotation += (m_speed * dt);
+	
 }
 
 void Sphere::render()
@@ -33,9 +31,15 @@ void Sphere::render()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);	// Takes care of horrible seams on the texture mapping.	
 	enableArrays();
 	arrayDataArrangment();
-	glTranslatef(0, 200.0f, -200.0f);
-	glRotatef(m_rotation, -0.5f, 0.5f, 0);
+
+	if (m_wireFrame)
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
+
 	glDrawArrays(GL_QUADS, 0, sphereVertices.size() / 3);
+	glDisable(GL_CULL_FACE);
 	disableArrays();
 }
 
@@ -44,9 +48,9 @@ void Sphere::setWireFrameMode(bool isWireFrame)
 	m_wireFrame = isWireFrame;
 }
 
-void Sphere::initSphere(float radius, float slices, float stacks)
+void Sphere::initSphere(float radius, int slices, int stacks, char* filepath)
 {
-	initTextures(m_moonTexPath);
+	initTextures(filepath);
 	generateSphereVerts(radius, slices, stacks);
 }
 

@@ -16,6 +16,6 @@ public:
 	// GROUND MODEL VARS
 	Model* cobbleGround;
 	char* cobbleGroundFilePath = "models/cobbleDecTri.obj";
-	char* cobbleGroundTexPath = "gfx/textures/stone.jpg";
+	char* cobbleGroundTexPath = "gfx/textures/coobleGround.jpg";
 };
 
