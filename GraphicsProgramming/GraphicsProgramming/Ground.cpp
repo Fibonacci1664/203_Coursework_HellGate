@@ -24,16 +24,13 @@ void Ground::initGround()
 
 void Ground::renderCobblePlane()
 {
-	// Move plane 3 units below the camera eye.
-	glTranslatef(0.0f, -3.0f, 0.0f);
-
-	for (int row = 0; row < 5; ++row)
+	for (int row = 0; row < 4; ++row)
 	{
-		for (int col = 0; col < 5; ++col)
+		for (int col = 0; col < 4; ++col)
 		{
 			cobbleGround->render();
 
-			if (col == 4)
+			if (col == 3)
 			{
 				continue;
 			}

@@ -56,7 +56,6 @@ void Sphere::initSphere(float radius, int slices, int stacks, char* filepath)
 
 void Sphere::initTextures(char* filepath)
 {
-	// Mipmap generation does not happen as we don't want mipmaps for our skybox.
 	m_texture = SOIL_load_OGL_texture
 	(
 		filepath,

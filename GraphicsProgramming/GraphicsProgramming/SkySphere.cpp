@@ -34,7 +34,6 @@ void SkySphere::render()
 	glCallList(m_sphereList);
 	glDisable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
-
 }
 
 void SkySphere::initSkySphere(float radius, float slices, float stacks)

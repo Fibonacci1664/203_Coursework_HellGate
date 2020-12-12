@@ -20,6 +20,9 @@
 #include "Model.h"
 #include "Ground.h"
 #include "Sphere.h"
+#include "Light.h"
+#include "Cage.h"
+#include "Crate.h"
 
 
 class Scene
@@ -75,22 +78,40 @@ protected:
 	// SKYSPHERE VARS
 	SkySphere* skySphere;
 
-	////////////////////////////////// SPHERE STUFF ///////////////////////////////
+	////////////////////////////////// SPHERE STUFF //////////////////////////////////
 	// SPHERE FUNCS
 	void initPlanetarySystem();
 	void renderPlanetarySystem();
 
 	// SPHERE VARS
 	Sphere* planet;
+	Sphere* planetAtmos;
 	Sphere* moon;
 	Sphere* moonOfMoon;
-	char* m_moonTexPath = "gfx/textures/4k_moon_fic.jpg";
+	char* m_moonTexPath = "gfx/textures/grey_moon_fic.jpg";
 	char* m_moonOfMoonTexPath = "gfx/textures/redMoon.jpg";
 	char* m_alienWorldTexPath = "gfx/textures/alien_world.png";
+	char* m_atmosTexPath = "gfx/textures/atmosphere.png";
 	float m_planetRotation;
 	float m_planetRotationSpeed;
+
+	////////////////////////////////// CAGE STUFF ////////////////////////////////////
+	// CAGE FUNCS
+	void initCage();
+	void renderCages();
+
+	// CAGE VARS
+	Cage* cage;
+
+	////////////////////////////////// CRATE STUFF ////////////////////////////////////
+	// CRATE FUNCS
+	void initCrate();
+	void renderCrates();
+
+	// CRATE VARS
+	Crate* crate;
 	
-	////////////////////////////////// TEXTURE STUFF //////////////////////////////////
+	////////////////////////////////// TEXTURE STUFF (PROB WONT NEED THIS!) ///////////
 	// TEXTURE FUNCS
 	void enableTextures();
 	void disableTextures();
@@ -104,6 +125,9 @@ protected:
 
 	// GROUND MODEL FUNCS
 	void initGround();
+
+	////////////////////////////////// LIGHTING STUFF /////////////////////////////////
+	//Light moon; // Implement this!
 };
 
 #endif

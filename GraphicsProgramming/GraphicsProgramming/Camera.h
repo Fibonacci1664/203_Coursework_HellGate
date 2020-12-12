@@ -55,7 +55,7 @@ public:
 	void setMoveSpeed(float newSpeed);
 	void setWindowWidth(int* widWidth);
 	void setWindowHeight(int* winHeight);
-
+	
 protected:
 	Input* input;
 
@@ -91,8 +91,8 @@ private:
 	float mouseYDiff;
 	int* windowWidth;
 	int* windowHeight;
-	float windowCentreX;
-	float windowCentreY;
+	int windowCentreX;
+	int windowCentreY;
 
 	bool firstRender = true;
 };

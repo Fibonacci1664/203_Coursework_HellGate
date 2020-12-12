@@ -16,6 +16,8 @@
 Scene* scene;
 Input* input;
 int oldTimeSinceStart = 0;
+const int WIDTH = 1920;
+const int HEIGHT = 1080;
 
 // Called when the window detects a change in size.
 // GLUT handles the window refresh, this function passes the new width and height to the
@@ -149,7 +151,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_STENCIL);
 	//glutInitWindowPosition(100, 100);
-	glutInitWindowSize(1920, 1080);
+	glutInitWindowSize(WIDTH, HEIGHT);
 	glutCreateWindow("SOME SCENE NAME!");
 	
 	// Register callback functions for change in size and rendering.

@@ -9,7 +9,7 @@ Scene::Scene(Input *in)
 	initialiseOpenGL();
 
 	// Other OpenGL / render setting should be applied here.
-	
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Initialise scene variables
 	m_wireFrame = false;
@@ -19,13 +19,38 @@ Scene::Scene(Input *in)
 	initSkySphere();
 	initGround();
 	initPlanetarySystem();
+	initCage();
+	initCrate();
 }
 
 Scene::~Scene()
 {
 	delete cam;
+	cam = nullptr;
+
 	delete skySphere;
+	skySphere = nullptr;
+
 	delete ground;
+	ground = nullptr;
+
+	delete planet;
+	planet = nullptr;
+
+	delete planetAtmos;
+	planetAtmos = nullptr;
+
+	delete moon;
+	moon = nullptr;
+
+	delete moonOfMoon;
+	moonOfMoon = nullptr;
+
+	delete cage;
+	cage = nullptr;
+
+	delete crate;
+	crate = nullptr;
 }
 
 void Scene::handleInput(float dt)
@@ -76,6 +101,14 @@ void Scene::render()
 	// Render a planetary system
 	renderPlanetarySystem();
 
+	// Render cages.
+	renderCages();
+
+	// Render crates.
+	renderCrates();
+	
+	
+	
 	// End render geometry --------------------------------------
 
 	// Render text, should be last object rendered.
@@ -120,6 +153,7 @@ void Scene::initSkySphere()
 void Scene::initPlanetarySystem()
 {
 	planet = new Sphere(12, 30, 30, m_alienWorldTexPath);
+	planetAtmos = new Sphere(12.3f, 30, 30, m_atmosTexPath);
 	moon = new Sphere(3, 10, 10, m_moonTexPath);
 	moonOfMoon = new Sphere(1, 10, 10, m_moonOfMoonTexPath);
 }
@@ -131,6 +165,11 @@ void Scene::renderPlanetarySystem()
 		glRotatef(-23.5f, 0, 0, 1.0f);
 		glRotatef(m_planetRotation, 0, 1.0f, 0);
 		planet->render();
+		glRotatef(m_planetRotation / 1.5f, 0, 1.0f, 0);
+		glEnable(GL_BLEND);
+		planetAtmos->render();
+		glDisable(GL_BLEND);
+
 
 		glPushMatrix();
 			glTranslatef(48.0f, 0, 0);
@@ -142,6 +181,62 @@ void Scene::renderPlanetarySystem()
 				glRotatef(m_planetRotation * 3, 0, 0, 1.0f);
 				moonOfMoon->render();
 			glPopMatrix();
+		glPopMatrix();
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// CAGE STUFF ///////////////////////////////////////////////////////////////
+
+void Scene::initCage()
+{
+	cage = new Cage();
+}
+
+void Scene::renderCages()
+{
+	glPushMatrix();
+		glTranslatef(0, 1.68f, 0);
+		cage->render(1.0f);						// Render corner cage.
+
+		glPushMatrix();
+			glTranslatef(2.1f, 0, 0);
+			cage->render(1.0f);					// Render one to its right.
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(0, 0, 2.1f);
+			cage->render(1.0f);					// Render one to its left.
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(0, 2.0f, 0);
+			glRotatef(45.0f, 0, 1.0f, 0);
+			cage->render(1.0f);					// Render one on top.
+		glPopMatrix();
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// CRATE STUFF //////////////////////////////////////////////////////////////
+
+void Scene::initCrate()
+{
+	crate = new Crate();
+}
+
+void Scene::renderCrates()
+{
+	glPushMatrix();
+		glTranslatef(21.0f, 1.68f, 0);
+		crate->render();
+
+		glPushMatrix();
+			glTranslatef(-2.1f, 0, 0);
+			crate->render();
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(0, 0, 2.1f);
+			crate->render();
 		glPopMatrix();
 	glPopMatrix();
 }
@@ -241,8 +336,8 @@ void Scene::renderTextOutput()
 {
 	// Render current mouse position and frames per second.
 	sprintf_s(mouseText, "Mouse: %i, %i", input->getMouseX(), input->getMouseY());
-	displayText(-1.f, 0.96f, 1.f, 0.f, 0.f, mouseText);
-	displayText(-1.f, 0.90f, 1.f, 0.f, 0.f, fps);
+	displayText(-1.f, 0.96f, 1.0f, 1.0f, 1.0f, mouseText);
+	displayText(-1.f, 0.90f, 1.0f, 1.0f, 1.0f, fps);
 }
 
 // Renders text to screen. Must be called last in render function (before swap buffers)

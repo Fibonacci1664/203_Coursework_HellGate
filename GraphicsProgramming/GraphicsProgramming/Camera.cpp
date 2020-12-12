@@ -51,8 +51,8 @@ void Camera::handleInput(float dt)
 		windowCentreY = *windowHeight / 2;
 		input->setMouseX(windowCentreX);
 		input->setMouseY(windowCentreY);
-		mouseX = windowCentreX;
-		mouseY = windowCentreY;
+		mouseX = (float)windowCentreX;
+		mouseY = (float)windowCentreY;
 		firstRender = false;
 	}
 
@@ -81,12 +81,12 @@ void Camera::update(float dt)
 		// Roll, Pitch and Yaw are variables stored by the camera
 		// handle rotation
 		// Only want to calculate these values once, when rotation changes, not every frame.
-		cosY = cosf(yaw * 3.1415 / 180);		// In initial val = 1
-		cosP = cosf(pitch * 3.1415 / 180);		// In initial val = 1
-		cosR = cosf(roll * 3.1415 / 180);		// In initial val = 1
-		sinY = sinf(yaw * 3.1415 / 180);		// In initial val = 0
-		sinP = sinf(pitch * 3.1415 / 180);		// In initial val = 0
-		sinR = sinf(roll * 3.1415 / 180);		// In initial val = 0
+		cosY = cosf(yaw * (float)(3.1415 / 180));		// In initial val = 1
+		cosP = cosf(pitch * (float)(3.1415 / 180));		// In initial val = 1
+		cosR = cosf(roll * (float)(3.1415 / 180));		// In initial val = 1
+		sinY = sinf(yaw * (float)(3.1415 / 180));		// In initial val = 0
+		sinP = sinf(pitch * (float)(3.1415 / 180));		// In initial val = 0
+		sinR = sinf(roll * (float)(3.1415 / 180));		// In initial val = 0
 	}
 
 	// This using the parametric equation of a sphere
@@ -255,7 +255,7 @@ void Camera::checkMouseInput(float dt)
 void Camera::initCamStartingPos()
 {
 	position.x = 0.0f;
-	position.y = 0.0f;
+	position.y = 3.0f;
 	position.z = 6.0f;
 
 	lookAt.x = 0.0f;

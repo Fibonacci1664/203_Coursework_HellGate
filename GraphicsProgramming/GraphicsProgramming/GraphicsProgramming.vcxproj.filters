@@ -45,6 +45,15 @@
     <ClCompile Include="Sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Crate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -75,6 +84,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Crate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
