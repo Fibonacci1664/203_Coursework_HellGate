@@ -45,6 +45,7 @@ bool Model::load(char* modelFilename, char* textureFilename)
 
 void Model::render()
 {	
+	bool blendIsOn = glIsEnabled(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -54,6 +55,7 @@ void Model::render()
 	glDrawArrays(GL_TRIANGLES, 0, sortedVertex.size() / 3);
 	disableArrays();
 	glDisable(GL_TEXTURE_2D);
+	blendIsOn = glIsEnabled(GL_BLEND);
 }
 
 

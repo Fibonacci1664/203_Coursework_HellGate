@@ -10,7 +10,7 @@ Scene::Scene(Input *in)
 
 	// Other OpenGL / render setting should be applied here.
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glEnable(GL_LIGHTING);
+	//glDisable(GL_LIGHTING);
 
 	// Initialise scene variables
 	m_wireFrame = false;
@@ -27,6 +27,8 @@ Scene::Scene(Input *in)
 	initBrazier();
 	initCoal();
 	initRockyLand();
+	initAltar();
+	initSkull();
 
 
 
@@ -84,6 +86,12 @@ Scene::~Scene()
 
 	delete rockyLand;
 	rockyLand = nullptr;
+
+	delete altar;
+	altar = nullptr;
+
+	delete skull;
+	skull = nullptr;
 }
 
 void Scene::handleInput(float dt)
@@ -121,11 +129,13 @@ void Scene::render()
 	// Render geometry/scene here -------------------------------------
 	// Build stencil for dragon portal.
 	//buildStencil();
-
+	
 	// Build mirror world inside the dragon protal.
-
+	//buildMirrorUniverse();
 
 	// Build real world.
+	//buildRealUniverse();
+
 	// Render a unit skysphere around the camera.
 	renderSkySphere();
 
@@ -153,11 +163,14 @@ void Scene::render()
 	// Render lumps of coal glowing in the braziers.
 	renderCoal();
 
-	renderRockyLand();
+	// Render the altar
+	renderAltar();
+
+	// Render skulls sitting on the altar.
+	renderSkulls();
 
 
-
-
+	
 
 
 	// Render cages. THESE NEED TO BE LAST THING RENDERED!
@@ -176,8 +189,8 @@ void Scene::initialiseOpenGL()
 {
 	//OpenGL settings
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	//glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
-	glClearColor(0, 0, 0, 1.0f);						// Black Background
+	glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
+	//glClearColor(0, 0, 0, 1.0f);						// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glClearStencil(0);									// Clear stencil buffer
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
@@ -233,10 +246,10 @@ void Scene::renderPlanetarySystem()
 		glTranslatef(0, -100.0f, -200.0f);
 		glRotatef(m_planetRotation / 2.0f, 0, 1.0f, 0);		
 		brownDwarf->render();
-		brownDwarfPointLight_1.renderPointLight(GL_LIGHT0, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_1);
+		/*brownDwarfPointLight_1.renderPointLight(GL_LIGHT0, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_1);
 		brownDwarfPointLight_2.renderPointLight(GL_LIGHT1, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_2);
 		brownDwarfPointLight_3.renderPointLight(GL_LIGHT2, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_3);
-		brownDwarfPointLight_4.renderPointLight(GL_LIGHT3, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_4);
+		brownDwarfPointLight_4.renderPointLight(GL_LIGHT3, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_4);*/
 		
 		/*glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);*/
@@ -290,10 +303,10 @@ void Scene::renderCoal()
 
 		for (int i = 0; i < 20; ++i)
 		{
-			glPushMatrix();											// Save the original lump of coal location.
+			glPushMatrix();												// Save the original lump of coal location.
 				glTranslatef(0.3 * cos(theta), 0, 0.3 * sin(delta));	// Translate a new lump of coal to some locaiton nearby.
 				lumpOfCoal->render();
-			glPopMatrix();											// Move back to original coal location, and repeat.
+			glPopMatrix();												// Move back to original coal location, and repeat.
 
 			theta += incTheta;
 			delta += incDelta;
@@ -307,10 +320,10 @@ void Scene::renderCoal()
 
 		for (int i = 0; i < 20; ++i)
 		{
-			glPushMatrix();											// Save the original lump of coal location.
+			glPushMatrix();												// Save the original lump of coal location.
 				glTranslatef(0.3 * cos(theta), 0, 0.3 * sin(delta));	// Translate a new lump of coal to some locaiton nearby.
 				lumpOfCoal->render();
-			glPopMatrix();											// Move back to original coal location, and repeat.
+			glPopMatrix();												// Move back to original coal location, and repeat.
 
 			theta += incTheta;
 			delta += incDelta;
@@ -457,6 +470,20 @@ void Scene::renderCoin()
 
 //////////////////////////////////////////////////////////// COIN STUFF END ///////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////// ALTAR STUFF //////////////////////////////////////////////////////////////
+
+void Scene::initAltar()
+{
+	altar = new Altar();
+}
+
+void Scene::renderAltar()
+{
+	altar->render();
+}
+
+//////////////////////////////////////////////////////////// ALTAR STUFF END //////////////////////////////////////////////////////////
+
 //////////////////////////////////////////////////////////// TEXTURE STUFF ////////////////////////////////////////////////////////////
 
 void Scene::enableTextures()
@@ -531,7 +558,33 @@ void Scene::renderBraziers()
 
 //////////////////////////////////////////////////////////// BRAZIER MODEL STUFF END //////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////// ROCKY LAND MODEL STUFF END //////////////////////////////////////////////////
+//////////////////////////////////////////////////////////// SKULL MODEL STUFF ////////////////////////////////////////////////////////
+
+void Scene::initSkull()
+{
+	skull = new Skull();
+}
+
+void Scene::renderSkulls()
+{
+	glPushMatrix();
+		glTranslatef(5.8f, 3.95f, 13.0f);
+		glRotatef(150.0f, 0, 1.0f, 0);
+		glScalef(0.5f, 0.5f, 0.5f);
+		skull->render();
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(14.2f, 3.95f, 13.0f);
+		glRotatef(210.0f, 0, 1.0f, 0);
+		glScalef(0.5f, 0.5f, 0.5f);
+		skull->render();
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// SKULL MODEL STUFF END ////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// ROCKY LAND MODEL STUFF END ///////////////////////////////////////////////
 void Scene::initRockyLand()
 {
 	rockyLand = new RockyLand();
@@ -539,17 +592,19 @@ void Scene::initRockyLand()
 
 void Scene::renderRockyLand()
 {
+	bool blendIsOn = glIsEnabled(GL_BLEND);
 	glPushMatrix();
-		glTranslatef(5.0f, 5.0f, 20.0f);
-		glScalef(0.1f, 0.1f, 0.1f);
+		glTranslatef(10.0f, 5.0f, 55.0f);
+		glScalef(0.75f, 0.75f, 0.75f);
 		rockyLand->render();
 	glPopMatrix();
+	blendIsOn = glIsEnabled(GL_BLEND);
 }
 
 //////////////////////////////////////////////////////////// STENCIL BUFFER STUFF /////////////////////////////////////////////////////
 
 void Scene::buildStencilPortalShape()
-{
+{	
 	glTranslatef(9.0f, 2.f, 23.5f);
 	glScalef(2.0f, 2.0f, 0);
 	glBegin(GL_POLYGON);
@@ -571,7 +626,7 @@ void Scene::buildStencil()
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	glDisable(GL_DEPTH_TEST);
 	glPushMatrix();
-		// Cutout stencil.
+		// Cutout stencil.	
 		buildStencilPortalShape();
 	glPopMatrix();
 	glEnable(GL_DEPTH_TEST);
@@ -583,12 +638,25 @@ void Scene::buildStencil()
 
 void Scene::buildMirrorUniverse()
 {
-
+	renderRockyLand();
 }
 
 void Scene::buildRealUniverse()
 {
+	glDisable(GL_STENCIL_TEST);
+	glEnable(GL_BLEND);
+	glDisable(GL_LIGHTING);
+	//glEnable(GL_COLOR_MATERIAL);
+	
+	// Build a real world portal shape effect.
+	glPushMatrix();
+		glColor4f(0, 0.47f, 1.0f, 0.3f);
+		buildStencilPortalShape();
+	glPopMatrix();
 
+	//glDisable(GL_COLOR_MATERIAL);
+	//glEnable(GL_LIGHTING);
+	glDisable(GL_BLEND);
 }
 
 //////////////////////////////////////////////////////////// STENCIL BUFFER STUFF END /////////////////////////////////////////////////

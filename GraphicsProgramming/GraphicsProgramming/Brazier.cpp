@@ -1,8 +1,5 @@
 #include "Brazier.h"
 
-
-#include "DragonPortal.h"
-
 Brazier::Brazier()
 {
 	initBrazier();

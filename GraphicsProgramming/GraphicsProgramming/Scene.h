@@ -28,6 +28,8 @@
 #include "DragonPortal.h"
 #include "Brazier.h"
 #include "RockyLand.h"
+#include "Altar.h"
+#include "Skull.h"
 
 
 class Scene
@@ -137,6 +139,9 @@ protected:
 	Sphere* lumpOfCoal;
 	char* m_hotCoalTexPath = "gfx/textures/hotCoal.jpg";
 
+	////////////////////////////////// CREATED GEOMETRY STUFF ////////////////////////
+
+
 	////////////////////////////////// CAGE STUFF ////////////////////////////////////
 	// CAGE FUNCS
 	void initCage();
@@ -168,6 +173,14 @@ protected:
 
 	// COIN VARS
 	Coin* coin;
+
+	////////////////////////////////// ALTAR STUFF ////////////////////////////////////
+	// ALTAR FUNCS
+	void initAltar();
+	void renderAltar();
+
+	// ALTAR VARS
+	Altar* altar;
 	
 	////////////////////////////////// TEXTURE STUFF (PROB WONT NEED THIS!) ///////////
 	// TEXTURE FUNCS
@@ -200,7 +213,15 @@ protected:
 	// BRAZIER VARS
 	Brazier* brazier;
 
-	////////////////////////////////// ROCKY LAND MODEL STUFF ////////////////////////////
+	////////////////////////////////// SKULL MODEL STUFF ///////////////////////////////
+	// SKULL FUNCS
+	void initSkull();
+	void renderSkulls();
+
+	// SKULL VARS
+	Skull* skull;
+
+	////////////////////////////////// ROCKY LAND MODEL STUFF //////////////////////////
 	// ROCKY LAND FUNC
 	void initRockyLand();
 	void renderRockyLand();

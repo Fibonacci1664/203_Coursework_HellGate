@@ -69,6 +69,15 @@
     <ClCompile Include="RockyLand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Altar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeBI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Skull.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -123,6 +132,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RockyLand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Altar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeBI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Skull.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -41,6 +41,7 @@ void Sphere::render()
 	glDrawArrays(GL_QUADS, 0, sphereVertices.size() / 3);
 	glDisable(GL_CULL_FACE);
 	disableArrays();
+	glDisable(GL_TEXTURE_2D);
 }
 
 void Sphere::setWireFrameMode(bool isWireFrame)
