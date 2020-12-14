@@ -54,6 +54,21 @@
     <ClCompile Include="Cage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Plank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DragonPortal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Brazier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RockyLand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -93,6 +108,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Cage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Plank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Coin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DragonPortal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Brazier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RockyLand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,6 +10,7 @@ Scene::Scene(Input *in)
 
 	// Other OpenGL / render setting should be applied here.
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_LIGHTING);
 
 	// Initialise scene variables
 	m_wireFrame = false;
@@ -18,9 +19,20 @@ Scene::Scene(Input *in)
 	initCamera();
 	initSkySphere();
 	initGround();
-	initPlanetarySystem();
-	initCage();
+	initPlanetarySystem();	
 	initCrate();
+	initPlank();
+	initCoin();
+	initDragonPortal();
+	initBrazier();
+	initCoal();
+	initRockyLand();
+
+
+
+
+	// THIS IS LAST.
+	initCage();
 }
 
 Scene::~Scene()
@@ -33,6 +45,9 @@ Scene::~Scene()
 
 	delete ground;
 	ground = nullptr;
+
+	delete brownDwarf;
+	brownDwarf = nullptr;
 
 	delete planet;
 	planet = nullptr;
@@ -51,6 +66,24 @@ Scene::~Scene()
 
 	delete crate;
 	crate = nullptr;
+
+	delete plank;
+	plank = nullptr;
+
+	delete coin;
+	coin = nullptr;
+
+	delete portal;
+	portal = nullptr;
+
+	delete brazier;
+	brazier = nullptr;
+
+	delete lumpOfCoal;
+	lumpOfCoal = nullptr;
+
+	delete rockyLand;
+	rockyLand = nullptr;
 }
 
 void Scene::handleInput(float dt)
@@ -75,7 +108,7 @@ void Scene::update(float dt)
 void Scene::render()
 {
 	// Clear Color and Depth Buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// Reset transformations
 	glLoadIdentity();
@@ -86,29 +119,50 @@ void Scene::render()
 		cam->getUp().x, cam->getUp().y, cam->getUp().z);
 	
 	// Render geometry/scene here -------------------------------------
+	// Build stencil for dragon portal.
+	//buildStencil();
 
+	// Build mirror world inside the dragon protal.
+
+
+	// Build real world.
 	// Render a unit skysphere around the camera.
-	glPushMatrix();
-		glTranslatef(cam->getPos().x, cam->getPos().y, cam->getPos().z);
-		skySphere->render();
-	glPopMatrix();
+	renderSkySphere();
 
 	// Render a plane of cobble stone ground.
-	glPushMatrix();
-		ground->render();
-	glPopMatrix();
+	renderGround();
 
 	// Render a planetary system
 	renderPlanetarySystem();
 
-	// Render cages.
-	renderCages();
-
 	// Render crates.
 	renderCrates();
-	
-	
-	
+
+	// Render planks.
+	renderPlanks();
+
+	// Render a cart wheel
+	renderCoin();
+
+	// Render a dragon portal
+	renderDragonPortal();
+
+	// Render braziers either side of the dragon portal.
+	renderBraziers();
+
+	// Render lumps of coal glowing in the braziers.
+	renderCoal();
+
+	renderRockyLand();
+
+
+
+
+
+
+	// Render cages. THESE NEED TO BE LAST THING RENDERED!
+	renderCages();
+
 	// End render geometry --------------------------------------
 
 	// Render text, should be last object rendered.
@@ -141,6 +195,8 @@ void Scene::initCamera()
 	cam->setWindowHeight(&height);
 }
 
+//////////////////////////////////////////////////////////// CAMERA STUFF END /////////////////////////////////////////////////////////
+
 //////////////////////////////////////////////////////////// SKYSPHERE STUFF //////////////////////////////////////////////////////////
 
 void Scene::initSkySphere()
@@ -148,10 +204,23 @@ void Scene::initSkySphere()
 	skySphere = new SkySphere(1, 50, 50);
 }
 
-//////////////////////////////////////////////////////////// SPHERE STUFF /////////////////////////////////////////////////////////////
+void Scene::renderSkySphere()
+{
+	glPushMatrix();
+		glTranslatef(cam->getPos().x, cam->getPos().y, cam->getPos().z);
+		skySphere->render();
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// SKYSPHERE STUFF END //////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// ALL SPHERE STUFF /////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// PLANET STUFF /////////////////////////////////////////////////////////////
 
 void Scene::initPlanetarySystem()
 {
+	brownDwarf = new Sphere(36, 40, 40, m_brownDwarfTexPath);
 	planet = new Sphere(12, 30, 30, m_alienWorldTexPath);
 	planetAtmos = new Sphere(12.3f, 30, 30, m_atmosTexPath);
 	moon = new Sphere(3, 10, 10, m_moonTexPath);
@@ -160,30 +229,98 @@ void Scene::initPlanetarySystem()
 
 void Scene::renderPlanetarySystem()
 {
+	glPushMatrix();													// Save world origin.
+		glTranslatef(0, -100.0f, -200.0f);
+		glRotatef(m_planetRotation / 2.0f, 0, 1.0f, 0);		
+		brownDwarf->render();
+		brownDwarfPointLight_1.renderPointLight(GL_LIGHT0, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_1);
+		brownDwarfPointLight_2.renderPointLight(GL_LIGHT1, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_2);
+		brownDwarfPointLight_3.renderPointLight(GL_LIGHT2, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_3);
+		brownDwarfPointLight_4.renderPointLight(GL_LIGHT3, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_4);
+		
+		/*glDisable(GL_LIGHT0);
+		glDisable(GL_LIGHTING);*/
+
+		glPushMatrix();												// Save brown dwarf origin.
+			
+			glTranslatef(150.f, 0, 0);
+			glRotatef(m_planetRotation, 0, 1.0f, 0);
+			planet->render();
+			glRotatef(m_planetRotation / 1.5f, 0, 1.0f, 0);
+			glEnable(GL_BLEND);
+			planetAtmos->render();
+			glDisable(GL_BLEND);
+
+
+			glPushMatrix();											// Save alien planet origin.
+				glTranslatef(48.0f, 0, 0);
+				glRotatef(m_planetRotation * 2, 0, 1.0f, 0);
+				moon->render();
+
+				glPushMatrix();										// Save moon origin.
+					glTranslatef(12.0f, 0, 0);
+					glRotatef(m_planetRotation * 3, 0, 0, 1.0f);
+					moonOfMoon->render();
+				glPopMatrix();										// Back to moon.
+			glPopMatrix();											// Back to planet.
+		glPopMatrix();												// Back to brown dwarf.
+	glPopMatrix();													// Back to world origin.
+}
+
+//////////////////////////////////////////////////////////// PLANET STUFF END ////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// LUMP COAL STUFF /////////////////////////////////////////////////////////////
+
+void Scene::initCoal()
+{
+	lumpOfCoal = new Sphere(0.1, 5, 5, m_hotCoalTexPath);
+}
+
+void Scene::renderCoal()
+{
+	float theta = 5;
+	float delta = 9;
+	float incTheta = 9;
+	float incDelta = 5;
+
 	glPushMatrix();
-		glTranslatef(0, 100.0f, -200.0f);
-		glRotatef(-23.5f, 0, 0, 1.0f);
-		glRotatef(m_planetRotation, 0, 1.0f, 0);
-		planet->render();
-		glRotatef(m_planetRotation / 1.5f, 0, 1.0f, 0);
-		glEnable(GL_BLEND);
-		planetAtmos->render();
-		glDisable(GL_BLEND);
+		glTranslatef(15.0f, 3.9f, 23.0f);
+		lumpOfCoal->render();
+		coalGlow_1.renderSpotLight(GL_LIGHT4, coalGlowLightAmbient, coalGlowLightDiffuse, coalGlowLightPosition, coalGlowSpotDirection);
 
+		for (int i = 0; i < 20; ++i)
+		{
+			glPushMatrix();											// Save the original lump of coal location.
+				glTranslatef(0.3 * cos(theta), 0, 0.3 * sin(delta));	// Translate a new lump of coal to some locaiton nearby.
+				lumpOfCoal->render();
+			glPopMatrix();											// Move back to original coal location, and repeat.
 
-		glPushMatrix();
-			glTranslatef(48.0f, 0, 0);
-			glRotatef(m_planetRotation * 2, 0, 1.0f, 0);
-			moon->render();
+			theta += incTheta;
+			delta += incDelta;
+		}
+	glPopMatrix();
 
-			glPushMatrix();
-				glTranslatef(12.0f, 0, 0);
-				glRotatef(m_planetRotation * 3, 0, 0, 1.0f);
-				moonOfMoon->render();
-			glPopMatrix();
-		glPopMatrix();
+	glPushMatrix();
+		glTranslatef(5.0f, 3.9f, 23.0f);
+		lumpOfCoal->render();
+		coalGlow_1.renderSpotLight(GL_LIGHT5, coalGlowLightAmbient, coalGlowLightDiffuse, coalGlowLightPosition, coalGlowSpotDirection);
+
+		for (int i = 0; i < 20; ++i)
+		{
+			glPushMatrix();											// Save the original lump of coal location.
+				glTranslatef(0.3 * cos(theta), 0, 0.3 * sin(delta));	// Translate a new lump of coal to some locaiton nearby.
+				lumpOfCoal->render();
+			glPopMatrix();											// Move back to original coal location, and repeat.
+
+			theta += incTheta;
+			delta += incDelta;
+		}
 	glPopMatrix();
 }
+
+//////////////////////////////////////////////////////////// LUMP COAL STUFF END //////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// ALL SPHERE STUFF END /////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////// CAGE STUFF ///////////////////////////////////////////////////////////////
 
@@ -216,6 +353,8 @@ void Scene::renderCages()
 	glPopMatrix();
 }
 
+//////////////////////////////////////////////////////////// CAGE STUFF END ///////////////////////////////////////////////////////////
+
 //////////////////////////////////////////////////////////// CRATE STUFF //////////////////////////////////////////////////////////////
 
 void Scene::initCrate()
@@ -241,6 +380,83 @@ void Scene::renderCrates()
 	glPopMatrix();
 }
 
+//////////////////////////////////////////////////////////// CRATE STUFF END //////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// PLANK STUFF //////////////////////////////////////////////////////////////
+
+void Scene::initPlank()
+{
+	plank = new Plank();
+}
+
+void Scene::renderPlanks()
+{
+	// Plank 1
+	glPushMatrix();
+		glTranslatef(18.5f, 2.0f, 2.0f);
+		glRotatef(90, 1.0f, 0, 0);
+		glRotatef(28, 0, 1.0f, 0);
+		glScalef(3.0f, 0.3f, 0.1f);
+		plank->render();
+	glPopMatrix();
+
+	// Plank 2
+	glPushMatrix();
+		glTranslatef(17.5f, 1.93f, 1.15f);
+		glRotatef(95, 1.0f, 0, 0);
+		glRotatef(25, 0, 1.0f, 0);
+		glRotatef(25, 0, 0, 1.0f);
+		glScalef(3.0f, 0.3f, 0.1f);
+		plank->render();
+	glPopMatrix();
+
+	// Plank 3
+	glPushMatrix();
+		glTranslatef(18.7f, 2.0f, 3.1f);
+		glRotatef(125, 1.0f, 0, 0);
+		glRotatef(30, 0, 1.0f, 0);
+		glRotatef(130, 0, 0, 1.0f);		
+		glScalef(2.0f, 0.3f, 0.1f);
+		plank->render();
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// PLANK STUFF END /////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// COIN STUFF //////////////////////////////////////////////////////////////
+
+void Scene::initCoin()
+{
+	coin = new Coin(30, 0.1f);
+}
+
+void Scene::renderCoin()
+{
+	float theta = 5;
+	float delta = 9;
+	float incTheta = 9;
+	float incDelta = 5;
+
+	glPushMatrix();
+		glTranslatef(19.0f, 2.7f, 0);
+		glRotatef(-90, 1.0f, 0, 0);
+		coin->render();
+
+		for (int i = 0; i < 10; ++i)
+		{
+			glPushMatrix();											// Save the original coins location.
+				glTranslatef(0.5*cos(theta), 0.5*sin(delta), 0);	// Translate a new coin to some locaiton nearby.
+				coin->render();
+			glPopMatrix();											// Move back to original coins location, and repeat.
+
+			theta += incTheta;
+			delta += incDelta;
+		}
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// COIN STUFF END ///////////////////////////////////////////////////////////
+
 //////////////////////////////////////////////////////////// TEXTURE STUFF ////////////////////////////////////////////////////////////
 
 void Scene::enableTextures()
@@ -253,7 +469,9 @@ void Scene::disableTextures()
 	glDisable(GL_TEXTURE_2D);
 }
 
-//////////////////////////////////////////////////////////// LOADED MODEL STUFF ///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////// TEXTURE STUFF END ////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// ALL LOADED MODEL STUFF ///////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////// GROUND MODEL STUFF ///////////////////////////////////////////////////////
 
@@ -261,6 +479,119 @@ void Scene::initGround()
 {
 	ground = new Ground();
 }
+
+void Scene::renderGround()
+{
+	glPushMatrix();
+		ground->render();
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// GROUND MODEL STUFF END ///////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// DRAGON PORTAL MODEL STUFF ////////////////////////////////////////////////
+
+void Scene::initDragonPortal()
+{
+	portal = new DragonPortal();
+}
+
+void Scene::renderDragonPortal()
+{
+	glPushMatrix();
+		glTranslatef(10.0f, 4.5f, 23.5f);
+		glScalef(0.05f, 0.05f, 0.05f);
+		portal->render();
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// DRAGON PORTAL MODEL STUFF END ////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// BRAZIER MODEL STUFF //////////////////////////////////////////////////////
+
+void Scene::initBrazier()
+{
+	brazier = new Brazier();
+}
+
+void Scene::renderBraziers()
+{
+	glPushMatrix();
+		glTranslatef(15.0f, 2.50f, 23.0f);
+		glScalef(0.015f, 0.015f, 0.015f);
+		brazier->render();
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(5.0f, 2.50f, 23.0f);
+		glScalef(0.015f, 0.015f, 0.015f);
+		brazier->render();
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// BRAZIER MODEL STUFF END //////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// ROCKY LAND MODEL STUFF END //////////////////////////////////////////////////
+void Scene::initRockyLand()
+{
+	rockyLand = new RockyLand();
+}
+
+void Scene::renderRockyLand()
+{
+	glPushMatrix();
+		glTranslatef(5.0f, 5.0f, 20.0f);
+		glScalef(0.1f, 0.1f, 0.1f);
+		rockyLand->render();
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// STENCIL BUFFER STUFF /////////////////////////////////////////////////////
+
+void Scene::buildStencilPortalShape()
+{
+	glTranslatef(9.0f, 2.f, 23.5f);
+	glScalef(2.0f, 2.0f, 0);
+	glBegin(GL_POLYGON);
+		glVertex3f(-0.5f, 0, 0);
+		glVertex3f(1.5f, 0, 0);
+		glVertex3f(2.2f, 2.2f, 0);
+		glVertex3f(1.75f, 3.5f, 0);
+		glVertex3f(-0.75f, 3.5f, 0);
+		glVertex3f(-1.2f, 2.2f, 0);
+	glEnd();
+}
+
+void Scene::buildStencil()
+{
+	// Build Stencil.
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_ALWAYS, 1, 1);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glDisable(GL_DEPTH_TEST);
+	glPushMatrix();
+		// Cutout stencil.
+		buildStencilPortalShape();
+	glPopMatrix();
+	glEnable(GL_DEPTH_TEST);
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glStencilFunc(GL_EQUAL, 1, 1);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+	// End Build Stencil.
+}
+
+void Scene::buildMirrorUniverse()
+{
+
+}
+
+void Scene::buildRealUniverse()
+{
+
+}
+
+//////////////////////////////////////////////////////////// STENCIL BUFFER STUFF END /////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////// GENERAL SCENE STUFF //////////////////////////////////////////////////////
 
@@ -271,9 +602,12 @@ void Scene::toggleWireFrame()
 		glPolygonMode(GL_FRONT, GL_LINE);
 		m_wireFrame = true;
 		input->setKeyUp('p');
+		brownDwarf->setWireFrameMode(true);
 		planet->setWireFrameMode(true);
+		planetAtmos->setWireFrameMode(true);
 		moon->setWireFrameMode(true);
 		moonOfMoon->setWireFrameMode(true);
+		lumpOfCoal->setWireFrameMode(true);
 	}
 
 	if (input->isKeyDown('p') && m_wireFrame)
@@ -281,9 +615,12 @@ void Scene::toggleWireFrame()
 		glPolygonMode(GL_FRONT, GL_FILL);
 		m_wireFrame = false;
 		input->setKeyUp('p');
+		brownDwarf->setWireFrameMode(false);
 		planet->setWireFrameMode(false);
+		planetAtmos->setWireFrameMode(false);
 		moon->setWireFrameMode(false);
 		moonOfMoon->setWireFrameMode(false);
+		lumpOfCoal->setWireFrameMode(false);
 	}
 }
 
@@ -372,3 +709,5 @@ void Scene::displayText(float x, float y, float r, float g, float b, char* strin
 	gluPerspective(fov, ((float)width/(float)height), nearPlane, farPlane);
 	glMatrixMode(GL_MODELVIEW);
 }
+
+//////////////////////////////////////////////////////////// GENERAL SCENE STUFF END //////////////////////////////////////////////////

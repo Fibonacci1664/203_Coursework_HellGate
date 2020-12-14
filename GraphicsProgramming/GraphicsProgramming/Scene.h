@@ -23,6 +23,11 @@
 #include "Light.h"
 #include "Cage.h"
 #include "Crate.h"
+#include "Plank.h"
+#include "Coin.h"
+#include "DragonPortal.h"
+#include "Brazier.h"
+#include "RockyLand.h"
 
 
 class Scene
@@ -64,6 +69,31 @@ protected:
 	char fps[40];
 	char mouseText[40];
 
+	////////////////////////////////// LIGHTING STUFF ///////////////////////////////
+	// LIGHT FUNCS
+
+	// LIGHT VARS
+	Light brownDwarfPointLight_1;
+	Light brownDwarfPointLight_2;
+	Light brownDwarfPointLight_3;
+	Light brownDwarfPointLight_4;
+	Light coalGlow_1;
+	Light coalGlow_2;
+
+	// Light properties
+	GLfloat brownDwarfLightAmbient[4] = { 0.3f, 0.1f, 0.03f, 1.0f };
+	GLfloat brownDwarfLightDiffuse[4] = { 0.3f, 0.1f, 0.03f, 1.0f };
+	GLfloat coalGlowLightAmbient[4] = { 0.48f, 0.24f, 0.17f, 1.0f };
+	GLfloat coalGlowLightDiffuse[4] = { 0.97f, 0.48f, 0.34f, 1.0f };
+	// Spot
+	GLfloat coalGlowSpotDirection[3] = { 0.0f, -1.0f, 0.0f };
+	// Point
+	GLfloat brownDwarfLightPosition_1[4] = { 40.0f, 0, 0, 1 };			// w = 0 = direction, w = 1 = point light
+	GLfloat brownDwarfLightPosition_2[4] = { -40.0f, 0, 0, 1 };			// w = 0 = direction, w = 1 = point light
+	GLfloat brownDwarfLightPosition_3[4] = { 0, 40.f, 0, 1 };			// w = 0 = direction, w = 1 = point light
+	GLfloat brownDwarfLightPosition_4[4] = { 0, -40.f, 0, 1 };			// w = 0 = direction, w = 1 = point light
+	GLfloat coalGlowLightPosition[4] = { 0, 6.0f, 0, 1 };			// w = 0 = direction, w = 1 = point light
+
 	////////////////////////////////// CAMERA STUFF //////////////////////////////////
 	// CAMERA FUNCS
 	void initCamera();
@@ -74,16 +104,19 @@ protected:
 	////////////////////////////////// SKYSPHERE STUFF ///////////////////////////////
 	// SKYSPHERE FUNCS
 	void initSkySphere();
+	void renderSkySphere();
 	
 	// SKYSPHERE VARS
 	SkySphere* skySphere;
 
 	////////////////////////////////// SPHERE STUFF //////////////////////////////////
-	// SPHERE FUNCS
+	// PLANET STUFF
+	// PLANET FUNCS
 	void initPlanetarySystem();
 	void renderPlanetarySystem();
 
-	// SPHERE VARS
+	// PLANET VARS
+	Sphere* brownDwarf;
 	Sphere* planet;
 	Sphere* planetAtmos;
 	Sphere* moon;
@@ -91,9 +124,18 @@ protected:
 	char* m_moonTexPath = "gfx/textures/grey_moon_fic.jpg";
 	char* m_moonOfMoonTexPath = "gfx/textures/redMoon.jpg";
 	char* m_alienWorldTexPath = "gfx/textures/alien_world.png";
+	char* m_brownDwarfTexPath = "gfx/textures/darkSun_2.png";
 	char* m_atmosTexPath = "gfx/textures/atmosphere.png";
 	float m_planetRotation;
 	float m_planetRotationSpeed;
+
+	// COAL FUNCS
+	void initCoal();
+	void renderCoal();
+
+	// COAL VARS
+	Sphere* lumpOfCoal;
+	char* m_hotCoalTexPath = "gfx/textures/hotCoal.jpg";
 
 	////////////////////////////////// CAGE STUFF ////////////////////////////////////
 	// CAGE FUNCS
@@ -103,13 +145,29 @@ protected:
 	// CAGE VARS
 	Cage* cage;
 
-	////////////////////////////////// CRATE STUFF ////////////////////////////////////
+	////////////////////////////////// CRATE STUFF ///////////////////////////////////
 	// CRATE FUNCS
 	void initCrate();
 	void renderCrates();
 
 	// CRATE VARS
 	Crate* crate;
+
+	////////////////////////////////// PLANK STUFF ///////////////////////////////////
+	// PLANK FUNCS
+	void initPlank();
+	void renderPlanks();
+
+	// PLANK VARS
+	Plank* plank;
+
+	////////////////////////////////// COIN STUFF ////////////////////////////////////
+	// COIN FUNCS
+	void initCoin();
+	void renderCoin();
+
+	// COIN VARS
+	Coin* coin;
 	
 	////////////////////////////////// TEXTURE STUFF (PROB WONT NEED THIS!) ///////////
 	// TEXTURE FUNCS
@@ -119,15 +177,47 @@ protected:
 	////////////////////////////////// LOADED MODEL STUFF /////////////////////////////
 
 	////////////////////////////////// GROUND MODEL STUFF /////////////////////////////
-
+	// GROUND MODEL FUNCS
+	void initGround();
+	void renderGround();
+	
 	// GROUND MODEL VARS
 	Ground* ground;
 
-	// GROUND MODEL FUNCS
-	void initGround();
+	////////////////////////////////// DRAGON PORTAL MODEL STUFF //////////////////////
+	// DRAGON PORTAL FUNCS
+	void initDragonPortal();
+	void renderDragonPortal();
 
-	////////////////////////////////// LIGHTING STUFF /////////////////////////////////
-	//Light moon; // Implement this!
+	// DRAGON PORTAL VARS
+	DragonPortal* portal;
+
+	////////////////////////////////// BRAZIER MODEL STUFF ////////////////////////////
+	// BRAZIER FUNCS
+	void initBrazier();
+	void renderBraziers();
+
+	// BRAZIER VARS
+	Brazier* brazier;
+
+	////////////////////////////////// ROCKY LAND MODEL STUFF ////////////////////////////
+	// ROCKY LAND FUNC
+	void initRockyLand();
+	void renderRockyLand();
+
+	// ROCKY LAND VARS
+	RockyLand* rockyLand;
+
+	////////////////////////////////// STENCIL BUFFER STUFF ////////////////////////////
+	// STENCIL FUNCS
+	void buildStencilPortalShape();
+	void buildStencil();
+	void buildMirrorUniverse();
+	void buildRealUniverse();
+
+
+	// STENCIL VARS;
+
 };
 
 #endif
