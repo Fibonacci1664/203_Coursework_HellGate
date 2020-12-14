@@ -29,6 +29,7 @@ Scene::Scene(Input *in)
 	initRockyLand();
 	initAltar();
 	initSkull();
+	initCandle();
 
 
 
@@ -92,6 +93,9 @@ Scene::~Scene()
 
 	delete skull;
 	skull = nullptr;
+
+	delete candle;
+	candle = nullptr;
 }
 
 void Scene::handleInput(float dt)
@@ -168,6 +172,9 @@ void Scene::render()
 
 	// Render skulls sitting on the altar.
 	renderSkulls();
+
+	// Render candles on the altar.
+	renderCandles();
 
 
 	
@@ -286,7 +293,7 @@ void Scene::renderPlanetarySystem()
 
 void Scene::initCoal()
 {
-	lumpOfCoal = new Sphere(0.1, 5, 5, m_hotCoalTexPath);
+	lumpOfCoal = new Sphere(0.1f, 5, 5, m_hotCoalTexPath);
 }
 
 void Scene::renderCoal()
@@ -304,7 +311,7 @@ void Scene::renderCoal()
 		for (int i = 0; i < 20; ++i)
 		{
 			glPushMatrix();												// Save the original lump of coal location.
-				glTranslatef(0.3 * cos(theta), 0, 0.3 * sin(delta));	// Translate a new lump of coal to some locaiton nearby.
+				glTranslatef(0.3f * cos(theta), 0, 0.3f * sin(delta));	// Translate a new lump of coal to some locaiton nearby.
 				lumpOfCoal->render();
 			glPopMatrix();												// Move back to original coal location, and repeat.
 
@@ -321,7 +328,7 @@ void Scene::renderCoal()
 		for (int i = 0; i < 20; ++i)
 		{
 			glPushMatrix();												// Save the original lump of coal location.
-				glTranslatef(0.3 * cos(theta), 0, 0.3 * sin(delta));	// Translate a new lump of coal to some locaiton nearby.
+				glTranslatef(0.3f * cos(theta), 0, 0.3f * sin(delta));	// Translate a new lump of coal to some locaiton nearby.
 				lumpOfCoal->render();
 			glPopMatrix();												// Move back to original coal location, and repeat.
 
@@ -440,25 +447,25 @@ void Scene::renderPlanks()
 
 void Scene::initCoin()
 {
-	coin = new Coin(30, 0.1f);
+	coin = new Disc(30.0f, 0.1f, m_coinTexPath, false, 0.0f);
 }
 
 void Scene::renderCoin()
 {
-	float theta = 5;
-	float delta = 9;
-	float incTheta = 9;
-	float incDelta = 5;
+	float theta = 5.0f;
+	float delta = 9.0f;
+	float incTheta = 9.0f;
+	float incDelta = 5.0f;
 
 	glPushMatrix();
 		glTranslatef(19.0f, 2.7f, 0);
-		glRotatef(-90, 1.0f, 0, 0);
+		glRotatef(-90.0f, 1.0f, 0, 0);
 		coin->render();
 
 		for (int i = 0; i < 10; ++i)
 		{
 			glPushMatrix();											// Save the original coins location.
-				glTranslatef(0.5*cos(theta), 0.5*sin(delta), 0);	// Translate a new coin to some locaiton nearby.
+				glTranslatef(0.5f * cos(theta), 0.5f * sin(delta), 0);	// Translate a new coin to some locaiton nearby.
 				coin->render();
 			glPopMatrix();											// Move back to original coins location, and repeat.
 
@@ -483,6 +490,48 @@ void Scene::renderAltar()
 }
 
 //////////////////////////////////////////////////////////// ALTAR STUFF END //////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////// CANDLE STUFF /////////////////////////////////////////////////////////////
+
+void Scene::initCandle()
+{
+	candle = new Candle(20.0f, 0.1f, 1.0f);
+}
+
+void Scene::renderCandles()
+{
+	glPushMatrix();
+		glTranslatef(10.0f, 3.9f, 13.0f);
+		candle->render();
+
+		glPushMatrix();
+			glTranslatef(1.5f, 0, 0);
+			glScalef(0.8f, 0.8f, 0.8f);
+			candle->render();
+
+			glPushMatrix();
+				glTranslatef(1.5f, 0, 0);
+				glScalef(0.8f, 0.8f, 0.8f);
+				candle->render();
+			glPopMatrix();
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(-1.5f, 0, 0);
+			glScalef(0.8f, 0.8f, 0.8f);
+			candle->render();
+
+			glPushMatrix();
+				glTranslatef(-1.5f, 0, 0);
+				glScalef(0.8f, 0.8f, 0.8f);
+				candle->render();
+			glPopMatrix();
+		glPopMatrix();
+	glPopMatrix();
+}
+
+//////////////////////////////////////////////////////////// CANDLE STUFF END /////////////////////////////////////////////////////////
+
 
 //////////////////////////////////////////////////////////// TEXTURE STUFF ////////////////////////////////////////////////////////////
 
@@ -676,6 +725,7 @@ void Scene::toggleWireFrame()
 		moon->setWireFrameMode(true);
 		moonOfMoon->setWireFrameMode(true);
 		lumpOfCoal->setWireFrameMode(true);
+		candle->setWireFrameMode(true);
 	}
 
 	if (input->isKeyDown('p') && m_wireFrame)
@@ -689,6 +739,7 @@ void Scene::toggleWireFrame()
 		moon->setWireFrameMode(false);
 		moonOfMoon->setWireFrameMode(false);
 		lumpOfCoal->setWireFrameMode(false);
+		candle->setWireFrameMode(false);
 	}
 }
 

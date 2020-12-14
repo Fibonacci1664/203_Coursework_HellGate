@@ -13,6 +13,7 @@ public:
 	Sphere(float radius, int slices, int stacks, char* filepath);
 	~Sphere();
 
+	void handleInput(float dt);
 	void update(float dt);
 	void render();
 	void setWireFrameMode(bool isWireFrame);
@@ -29,7 +30,7 @@ private:
 	void arrayDataArrangment();
 
 	bool m_wireFrame;
-	const double PI = 3.14159265359;
+	const float PI = 3.14159265359f;
 
 	// TEXTURE VARS
 	GLuint m_texture;

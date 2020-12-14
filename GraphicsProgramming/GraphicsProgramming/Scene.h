@@ -24,12 +24,13 @@
 #include "Cage.h"
 #include "Crate.h"
 #include "Plank.h"
-#include "Coin.h"
+//#include "Coin.h"
 #include "DragonPortal.h"
 #include "Brazier.h"
 #include "RockyLand.h"
 #include "Altar.h"
 #include "Skull.h"
+#include "Candle.h"
 
 
 class Scene
@@ -166,13 +167,22 @@ protected:
 	// PLANK VARS
 	Plank* plank;
 
-	////////////////////////////////// COIN STUFF ////////////////////////////////////
+	////////////////////////////////// DISC STUFF ////////////////////////////////////
 	// COIN FUNCS
 	void initCoin();
 	void renderCoin();
 
 	// COIN VARS
-	Coin* coin;
+	Disc* coin;
+	char* m_coinTexPath = "gfx/textures/goldCoin.png";
+
+	// CANDLE FUNCS
+	void initCandle();
+	void renderCandles();
+
+	// CANDLE VARS
+	Candle* candle;
+	char* m_candleTexPath = "gfx/textures/candleWax.jpg";
 
 	////////////////////////////////// ALTAR STUFF ////////////////////////////////////
 	// ALTAR FUNCS

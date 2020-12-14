@@ -90,9 +90,10 @@
     <ClCompile Include="Brazier.cpp" />
     <ClCompile Include="Cage.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="Candle.cpp" />
     <ClCompile Include="Crate.cpp" />
     <ClCompile Include="CubeBI.cpp" />
+    <ClCompile Include="Disc.cpp" />
     <ClCompile Include="DragonPortal.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -113,9 +114,10 @@
     <ClInclude Include="Brazier.h" />
     <ClInclude Include="Cage.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Coin.h" />
+    <ClInclude Include="Candle.h" />
     <ClInclude Include="Crate.h" />
     <ClInclude Include="CubeBI.h" />
+    <ClInclude Include="Disc.h" />
     <ClInclude Include="DragonPortal.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Input.h" />
