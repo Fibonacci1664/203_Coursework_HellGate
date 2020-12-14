@@ -31,6 +31,7 @@
 #include "Altar.h"
 #include "Skull.h"
 #include "Candle.h"
+#include "Page.h"
 
 
 class Scene
@@ -140,10 +141,10 @@ protected:
 	Sphere* lumpOfCoal;
 	char* m_hotCoalTexPath = "gfx/textures/hotCoal.jpg";
 
-	////////////////////////////////// CREATED GEOMETRY STUFF ////////////////////////
+	////////////////////////////////// CREATED GEOMETRY STUFF /////////////////////////
 
 
-	////////////////////////////////// CAGE STUFF ////////////////////////////////////
+	////////////////////////////////// CAGE STUFF /////////////////////////////////////
 	// CAGE FUNCS
 	void initCage();
 	void renderCages();
@@ -151,7 +152,7 @@ protected:
 	// CAGE VARS
 	Cage* cage;
 
-	////////////////////////////////// CRATE STUFF ///////////////////////////////////
+	////////////////////////////////// CRATE STUFF ////////////////////////////////////
 	// CRATE FUNCS
 	void initCrate();
 	void renderCrates();
@@ -159,7 +160,7 @@ protected:
 	// CRATE VARS
 	Crate* crate;
 
-	////////////////////////////////// PLANK STUFF ///////////////////////////////////
+	////////////////////////////////// PLANK STUFF ////////////////////////////////////
 	// PLANK FUNCS
 	void initPlank();
 	void renderPlanks();
@@ -167,7 +168,7 @@ protected:
 	// PLANK VARS
 	Plank* plank;
 
-	////////////////////////////////// DISC STUFF ////////////////////////////////////
+	////////////////////////////////// DISC STUFF /////////////////////////////////////
 	// COIN FUNCS
 	void initCoin();
 	void renderCoin();
@@ -191,11 +192,20 @@ protected:
 
 	// ALTAR VARS
 	Altar* altar;
-	
-	////////////////////////////////// TEXTURE STUFF (PROB WONT NEED THIS!) ///////////
-	// TEXTURE FUNCS
-	void enableTextures();
-	void disableTextures();
+
+	////////////////////////////////// PAGES STUFF ////////////////////////////////////
+	// PAGES FUNCS
+	void initPage();
+	void renderPages();
+
+	// PAGES VARS
+	Page* page_1;
+	Page* page_2;
+	Page* page_3;
+
+	char* evilPage_1Path = "gfx/textures/evilPage_1.png";
+	char* evilPage_2Path = "gfx/textures/evilPage_2.jpg";
+	char* evilPage_3Path = "gfx/textures/evilPage_3.jpg";
 
 	////////////////////////////////// LOADED MODEL STUFF /////////////////////////////
 

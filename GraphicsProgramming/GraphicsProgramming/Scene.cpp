@@ -30,6 +30,7 @@ Scene::Scene(Input *in)
 	initAltar();
 	initSkull();
 	initCandle();
+	initPage();
 
 
 
@@ -96,6 +97,9 @@ Scene::~Scene()
 
 	delete candle;
 	candle = nullptr;
+
+	delete page_1;
+	page_1 = nullptr;
 }
 
 void Scene::handleInput(float dt)
@@ -175,6 +179,9 @@ void Scene::render()
 
 	// Render candles on the altar.
 	renderCandles();
+
+	// Render evil ritual pages on the altar.
+	renderPages();
 
 
 	
@@ -532,20 +539,37 @@ void Scene::renderCandles()
 
 //////////////////////////////////////////////////////////// CANDLE STUFF END /////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////// PAGES STUFF //////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////// TEXTURE STUFF ////////////////////////////////////////////////////////////
-
-void Scene::enableTextures()
+void Scene::initPage()
 {
-	glEnable(GL_TEXTURE_2D);
+	page_1 = new Page(0.7f, 1.0f, evilPage_1Path);
+	page_2 = new Page(0.7f, 1.0f, evilPage_2Path);
+	page_3 = new Page(0.7f, 1.0f, evilPage_3Path);
 }
 
-void Scene::disableTextures()
+void Scene::renderPages()
 {
-	glDisable(GL_TEXTURE_2D);
+	glPushMatrix();
+		glTranslatef(10.35f, 4.0f, 12.4f);
+		glRotatef(180.0f, 0, 1.0f, 0);
+		page_1->render();
+
+		glPushMatrix();
+			glTranslatef(1.5f, 0, 0);
+			glRotatef(-20.0f, 0, 1.0f, 0);
+			page_2->render();
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(-1.5f, 0, 0);
+			glRotatef(20.0f, 0, 1.0f, 0);
+			page_3->render();
+		glPopMatrix();
+	glPopMatrix();
 }
 
-//////////////////////////////////////////////////////////// TEXTURE STUFF END ////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////// PAGES STUFF END //////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////// ALL LOADED MODEL STUFF ///////////////////////////////////////////////////
 
@@ -674,10 +698,12 @@ void Scene::buildStencil()
 	glStencilFunc(GL_ALWAYS, 1, 1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	glDisable(GL_DEPTH_TEST);
+
 	glPushMatrix();
 		// Cutout stencil.	
 		buildStencilPortalShape();
 	glPopMatrix();
+
 	glEnable(GL_DEPTH_TEST);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glStencilFunc(GL_EQUAL, 1, 1);

@@ -17,11 +17,6 @@ Sphere::~Sphere()
 	
 }
 
-void Sphere::update(float dt)
-{
-	
-}
-
 void Sphere::render()
 {
 	glEnable(GL_TEXTURE_2D);

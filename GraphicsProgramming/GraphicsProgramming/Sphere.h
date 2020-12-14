@@ -13,8 +13,6 @@ public:
 	Sphere(float radius, int slices, int stacks, char* filepath);
 	~Sphere();
 
-	void handleInput(float dt);
-	void update(float dt);
 	void render();
 	void setWireFrameMode(bool isWireFrame);
 

@@ -100,6 +100,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Page.cpp" />
     <ClCompile Include="Plank.cpp" />
     <ClCompile Include="RockyLand.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Page.h" />
     <ClInclude Include="Plank.h" />
     <ClInclude Include="RockyLand.h" />
     <ClInclude Include="Scene.h" />
