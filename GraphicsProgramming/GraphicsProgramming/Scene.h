@@ -24,7 +24,6 @@
 #include "Cage.h"
 #include "Crate.h"
 #include "Plank.h"
-//#include "Coin.h"
 #include "DragonPortal.h"
 #include "Brazier.h"
 #include "RockyLand.h"
@@ -32,6 +31,7 @@
 #include "Skull.h"
 #include "Candle.h"
 #include "Page.h"
+#include "Material.h"
 
 
 class Scene
@@ -58,6 +58,7 @@ protected:
 	void renderTextOutput();
 	void calculateFPS();
 	void toggleWireFrame();
+	void initTextures();
 
 	bool m_wireFrame;
 	
@@ -104,6 +105,11 @@ protected:
 
 	// CAMERA VARS
 	Camera* cam;
+	bool camera_1;
+	bool camera_2;
+	bool motionCam;
+	float cameraZoom;
+	float cameraZoomSpeed;
 
 	////////////////////////////////// SKYSPHERE STUFF ///////////////////////////////
 	// SKYSPHERE FUNCS
@@ -184,6 +190,13 @@ protected:
 	// CANDLE VARS
 	Candle* candle;
 	char* m_candleTexPath = "gfx/textures/candleWax.jpg";
+	Material emission_mat;		// For the flame of the center candle.
+
+	// EMISSION MATERIAL FOR FLAME LOCATION
+	GLfloat mat_amb_col[4] = { 0.4f, 0.4f, 0.4f, 1.0f };
+	GLfloat mat_diff_col[4] = { 0.878f, 0.616f, 0.216f, 1.0f };		// ALWAYS KEEP SPECULAR AND DIFFUSE SIMILAR IF NOT IDENTICAL.
+	GLfloat mat_spec_col[4] = { 0.878f, 0.616f, 0.216f, 1.0f };
+	GLfloat mat_emission_col[4] = { 0, 0, 0, 1.0f };
 
 	////////////////////////////////// ALTAR STUFF ////////////////////////////////////
 	// ALTAR FUNCS
@@ -257,8 +270,26 @@ protected:
 	void buildRealUniverse();
 
 
-	// STENCIL VARS;
+	// STENCIL VARS
 
+	////////////////////////////////// SHADOW STUFF ///////////////////////////////////
+	// SHADOW FUNCS
+	void imposter();
+	void drawTexQuad(float scale, GLuint texture);
+
+	// SHADOW VARS
+	GLuint imposterTex;
+	char* imposterTexPath = "gfx/textures/imposter.png";
+	Light candleLight;
+
+	// Light properties
+	GLfloat candleLightAmbience[4] = { 0.3f, 0.1f, 0.03f, 1.0f };
+	GLfloat candleLightDiffuse[4] = { 0.878f, 0.616f, 0.216f, 1.0f };
+	// Point
+	GLfloat candleLightPosition[4] = { 0, 0, 0, 1 };			// w = 0 = direction, w = 1 = point light
+
+	float lightX = 0, lightY = 0, lightZ = 0;
+	float lightSpeed = 20;
 };
 
 #endif

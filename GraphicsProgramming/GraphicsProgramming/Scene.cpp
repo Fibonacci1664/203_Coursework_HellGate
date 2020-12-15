@@ -7,12 +7,18 @@ Scene::Scene(Input *in)
 	// Store pointer for input class
 	input = in;
 	initialiseOpenGL();
+	initTextures();
 
 	// Other OpenGL / render setting should be applied here.
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glDisable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 
 	// Initialise scene variables
+	camera_1 = false;
+	camera_2 = false;
+	motionCam = true;
+	cameraZoom = 0;
+	cameraZoomSpeed = 50.0f;
 	m_wireFrame = false;
 	m_planetRotation = 0;
 	m_planetRotationSpeed = 5.0f;
@@ -100,13 +106,54 @@ Scene::~Scene()
 
 	delete page_1;
 	page_1 = nullptr;
+
+	delete page_2;
+	page_2 = nullptr;
+
+	delete page_3;
+	page_3 = nullptr;
 }
 
 void Scene::handleInput(float dt)
 {
 	// Handle user input
-	cam->handleInput(dt);
+	if (motionCam)
+	{
+		cam->handleInput(dt);
+	}
+	
 	toggleWireFrame();
+
+	if (input->isKeyDown('1'))
+	{
+		camera_1 = true;
+		camera_2 = false;
+		motionCam = false;
+	}
+	
+	if (input->isKeyDown('2'))
+	{
+		camera_1 = false;
+		camera_2 = true;
+		motionCam = false;
+	}
+
+	if (input->isKeyDown('3'))
+	{
+		camera_1 = false;
+		camera_2 = false;
+		motionCam = true;
+	}
+
+	if (input->isKeyDown('m'))
+	{
+		cameraZoom += cameraZoomSpeed * dt;
+	}
+
+	if (input->isKeyDown('n'))
+	{
+		cameraZoom -= cameraZoomSpeed * dt;
+	}
 }
 
 void Scene::update(float dt)
@@ -129,10 +176,25 @@ void Scene::render()
 	// Reset transformations
 	glLoadIdentity();
 	// Set the camera
-	//gluLookAt(0.0f, 0.0f, 6.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-	gluLookAt(cam->getPos().x, cam->getPos().y, cam->getPos().z,
-		cam->getLookAt().x, cam->getLookAt().y, cam->getLookAt().z,
-		cam->getUp().x, cam->getUp().y, cam->getUp().z);
+
+	if (camera_1)
+	{
+		// Planet cam, zoom only.
+		gluLookAt(0.0f, 10.0f + cameraZoom, cameraZoom, 0, -100.0f, -200.0f, 0.0f, 1.0f, 0.0f);
+	}
+	else if(camera_2)
+	{
+		// Static cam, looking at altar.
+		gluLookAt(10.0f, 10.0f, 0.0f, 10.0f, -15.0f, 85.0f, 0.0f, 1.0f, 0.0f);
+	}
+	else if(motionCam)
+	{
+		gluLookAt(cam->getPos().x, cam->getPos().y, cam->getPos().z,
+			cam->getLookAt().x, cam->getLookAt().y, cam->getLookAt().z,
+			cam->getUp().x, cam->getUp().y, cam->getUp().z);
+	}
+	
+	
 	
 	// Render geometry/scene here -------------------------------------
 	// Build stencil for dragon portal.
@@ -203,8 +265,8 @@ void Scene::initialiseOpenGL()
 {
 	//OpenGL settings
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
-	//glClearColor(0, 0, 0, 1.0f);						// Black Background
+	//glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
+	glClearColor(0, 0, 0, 1.0f);						// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glClearStencil(0);									// Clear stencil buffer
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
@@ -260,13 +322,13 @@ void Scene::renderPlanetarySystem()
 		glTranslatef(0, -100.0f, -200.0f);
 		glRotatef(m_planetRotation / 2.0f, 0, 1.0f, 0);		
 		brownDwarf->render();
-		/*brownDwarfPointLight_1.renderPointLight(GL_LIGHT0, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_1);
-		brownDwarfPointLight_2.renderPointLight(GL_LIGHT1, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_2);
-		brownDwarfPointLight_3.renderPointLight(GL_LIGHT2, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_3);
-		brownDwarfPointLight_4.renderPointLight(GL_LIGHT3, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_4);*/
-		
-		/*glDisable(GL_LIGHT0);
-		glDisable(GL_LIGHTING);*/
+
+		glPushMatrix();
+			brownDwarfPointLight_1.renderPointLight(GL_LIGHT0, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_1);
+			brownDwarfPointLight_2.renderPointLight(GL_LIGHT1, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_2);
+			brownDwarfPointLight_3.renderPointLight(GL_LIGHT2, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_3);
+			brownDwarfPointLight_4.renderPointLight(GL_LIGHT3, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_4);
+		glPopMatrix();
 
 		glPushMatrix();												// Save brown dwarf origin.
 			
@@ -510,28 +572,73 @@ void Scene::renderCandles()
 	glPushMatrix();
 		glTranslatef(10.0f, 3.9f, 13.0f);
 		candle->render();
+		imposter();		// Shadow for the centre candle.
 
+		glPushMatrix();				// Save candles location.			
+			glTranslatef(0, 1.115f, 0);		// Make a little flame from a gluSphere.
+			glScalef(0.8f, 1.7f, 0.8f);
+			//emission_mat.createEmisssionMat(mat_amb_col, mat_diff_col, mat_spec_col, mat_emission_col, 100);
+			gluSphere(gluNewQuadric(), 0.01f, 20, 20);	// Create a little sphere as a visual location of the light.
+			//glTranslatef(lightX, lightY, lightZ);		// For debugging light.
+			candleLight.renderPointLight(GL_LIGHT6, candleLightAmbience, candleLightDiffuse, candleLightPosition);
+		glPopMatrix();
+		
+		// Centre left candle
 		glPushMatrix();
 			glTranslatef(1.5f, 0, 0);
 			glScalef(0.8f, 0.8f, 0.8f);
 			candle->render();
 
+			// Shadow for centre left candle
+			glPushMatrix();
+				glTranslatef(0.2f, 0.01f, -0.2f);
+				glRotatef(45.0f, 0, 1.0f, 0);
+				glScalef(2.0f, 1.0f, 0.7f);
+				imposter();
+			glPopMatrix();
+
+			// Left most candle.
 			glPushMatrix();
 				glTranslatef(1.5f, 0, 0);
 				glScalef(0.8f, 0.8f, 0.8f);
 				candle->render();
+
+				// Shadow for left most candle
+				glPushMatrix();
+					glTranslatef(0.43f, 0.02f, -0.16f);
+					glRotatef(20.0f, 0, 1.0f, 0);
+					glScalef(3.0f, 1.0f, 0.7f);
+					imposter();
+				glPopMatrix();
 			glPopMatrix();
 		glPopMatrix();
 
+		// Center right candle.
 		glPushMatrix();
 			glTranslatef(-1.5f, 0, 0);
 			glScalef(0.8f, 0.8f, 0.8f);
 			candle->render();
 
+			// Shadow for centre right candle
+			/*glPushMatrix();
+				glTranslatef(-0.2f, 0.01f, -0.2f);
+				glRotatef(-45.0f, 0, 1.0f, 0);
+				glScalef(2.0f, 1.0f, 0.7f);
+				imposter();
+			glPopMatrix();*/
+
 			glPushMatrix();
 				glTranslatef(-1.5f, 0, 0);
 				glScalef(0.8f, 0.8f, 0.8f);
 				candle->render();
+
+				// Shadow for right most candle
+				/*glPushMatrix();
+					glTranslatef(-0.43f, 0.02f, -0.16f);
+					glRotatef(-20.0f, 0, 1.0f, 0);
+					glScalef(3.0f, 1.0f, 0.7f);
+					imposter();
+				glPopMatrix();*/
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
@@ -734,9 +841,68 @@ void Scene::buildRealUniverse()
 	glDisable(GL_BLEND);
 }
 
-//////////////////////////////////////////////////////////// STENCIL BUFFER STUFF END /////////////////////////////////////////////////
+//////////////////////////////////////////////////////////// STENCIL BUFFER STUFF END ////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////// GENERAL SCENE STUFF //////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////// SHADOW STUFF END ////////////////////////////////////////////////////////
+
+void Scene::imposter()
+{
+	// Render Imposter.
+	glDisable(GL_LIGHTING);	// Switch lighting off
+	glEnable(GL_BLEND);		// Switch blending on.
+
+	glPushMatrix();
+		glTranslatef(0, 0.06f, 0);
+		drawTexQuad(0.2f, imposterTex);	// Create a simple quad with imposter texture.
+	glPopMatrix();
+
+	glDisable(GL_BLEND);
+	glEnable(GL_LIGHTING);
+}
+
+void Scene::drawTexQuad(float scale, GLuint texture)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glBegin(GL_QUADS);
+		glNormal3f(0, 1.0f, 0);
+		glTexCoord2f(0, 0);
+		glVertex3f(-scale, 0, -scale);
+		glNormal3f(0, 1.0f, 0);
+		glTexCoord2f(0, 1.0f);
+		glVertex3f(-scale, 0, scale);
+		glNormal3f(0, 1.0f, 0);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(scale, 0, scale);
+		glNormal3f(0, 1.0f, 0);
+		glTexCoord2f(1.0f, 0);
+		glVertex3f(scale, 0, -scale);
+	glEnd();
+}
+
+//////////////////////////////////////////////////////////// SHADOW STUFF END END ////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////// GENERAL SCENE STUFF /////////////////////////////////////////////////////
+
+void Scene::initTextures()
+{
+	imposterTex = SOIL_load_OGL_texture
+	(
+		imposterTexPath,
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID, SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+
+	// Check for an error during the load process.
+	if (imposterTex == 0)
+	{
+		printf("SOIL loading error: '%s'\n", SOIL_last_result());
+	}
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+}
 
 void Scene::toggleWireFrame()
 {
