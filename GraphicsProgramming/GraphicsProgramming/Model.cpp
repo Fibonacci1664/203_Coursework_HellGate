@@ -1,25 +1,60 @@
-// Below ifdef required to remove warnings for unsafe version of fopen and fscanf.
-// Secure version won't work cross-platform, forcing this small hack.
+/*
+ * About this class
+ *		- Handles all things Model related, namely:
+ *			- Loading model data (.obj).
+ *			- Parsing model data (tris).
+ *			- Storing model data in new data structures.
+ *			- Loading textures (NOT .mtl files).
+ *			- Rendering model using glDrawArrays(...).
+ *
+ * Original @author Mark Ropper / Paul Robertson
+ * 
+ * Updated by @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+ ///////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * Below ifdef required to remove warnings for unsafe version of fopen and fscanf.
+ * Secure version won't work cross-platform, forcing this small hack.
+ */
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-// Helps to get rid of seams on the texture.
+// BEGIN REF
+/*
+ * Helps to get rid of seams on the texture.
+ *
+ * Original @author - Dorbie, Feb 2006.
+ *
+ * Adapted from - https://community.khronos.org/t/skybox-with-seams/34441/5
+ */
 constexpr auto GL_CLAMP_TO_EDGE = 0x812F;
+// END REF
 
 #include "Model.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// CONSTRUCTOR.
 Model::Model()
 {
 	m_isTextured = false;
 	m_texture = 0;
 }
 
+// DESTRUCTOR.
 Model::~Model()
 {
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// FUNCTIONS.
 bool Model::load(char* modelFilename, char* textureFilename)
 {
 	bool result;
@@ -43,6 +78,8 @@ bool Model::load(char* modelFilename, char* textureFilename)
 	return true;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Model::render()
 {	
 	bool blendIsOn = glIsEnabled(GL_BLEND);
@@ -58,6 +95,7 @@ void Model::render()
 	blendIsOn = glIsEnabled(GL_BLEND);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
 
 // Modified from a mulit-threaded version by Mark Ropper.
 bool Model::loadModel(char* filename)
@@ -197,6 +235,8 @@ bool Model::loadModel(char* filename)
 }
 // END LOAD MODEL FUNCTION.
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Model::loadTexture(char* filename)
 {
 	m_texture = SOIL_load_OGL_texture
@@ -216,12 +256,16 @@ void Model::loadTexture(char* filename)
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Model::enableArrays()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Model::disableArrays()
 {
@@ -230,9 +274,13 @@ void Model::disableArrays()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Model::arrayDataArrangment()
 {
 	glVertexPointer(3, GL_FLOAT, 0, sortedVertex.data());
 	glNormalPointer(GL_FLOAT, 0, sortedNormals.data());
 	glTexCoordPointer(2, GL_FLOAT, 0, sortedTexCoords.data());
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////

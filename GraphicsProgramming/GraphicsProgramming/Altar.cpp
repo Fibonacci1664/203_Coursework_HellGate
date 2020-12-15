@@ -1,13 +1,29 @@
+/*
+ * About this class
+ *		- Altar object consisting of two components
+ *			- Base - CubeBI object
+ *			- Top - CubeBI object
+ *		- This class loads its own textures and draws itself.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 #include "Altar.h"
-#include <stdio.h>
 
+///////////////////////////////////////////////////////////////////////////////////////////
 
+// CONSTRUCTOR.
 Altar::Altar()
 {
 	initTextures();
 	initAltar();
 }
 
+// DESTRUCTOR.
 Altar::~Altar()
 {
 	delete base;
@@ -17,11 +33,16 @@ Altar::~Altar()
 	top = nullptr;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// FUNCTIONS
 void Altar::initAltar()
 {
 	base = new CubeBI();
 	top = new CubeBI();
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Altar::render()
 {
@@ -39,6 +60,8 @@ void Altar::render()
 		glPopMatrix();
 	glPopMatrix();
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Altar::initTextures()
 {
@@ -72,3 +95,5 @@ void Altar::initTextures()
 		printf("SOIL loading error altar top texture: '%s'\n", SOIL_last_result());
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////

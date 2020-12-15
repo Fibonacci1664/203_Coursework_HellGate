@@ -1,22 +1,48 @@
+/*
+ * About this class
+ *		- Sphere object is a procedurally generated sphere.
+ *		- Stores the verts, norms and texCoords in vectors.
+ *		- Renders using glDrawArrays(...).
+ *		- Takes care of loading its own textures etc.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// BEGIN REF
+/*
+ * Helps to get rid of seams on the texture.
+ *
+ * Original @author - Dorbie, Feb 2006.
+ *
+ * Adapted from - https://community.khronos.org/t/skybox-with-seams/34441/5
+ */
+constexpr auto GL_CLAMP_TO_EDGE = 0x812F;
+// END REF
+
 #include "Sphere.h"
 
-// Helps to get rid of seams on the texture.
-constexpr auto GL_CLAMP_TO_EDGE = 0x812F;
+///////////////////////////////////////////////////////////////////////////////////////////
 
-// Constructor, maybe change this to render just a basic sphere then have separate func to call
-// for setting things like translate, rotate, colour etc.
+// CONSTRUCTOR.
 Sphere::Sphere(float radius, int slices, int stacks, char* filepath)
 {
 	initSphere(radius, slices, stacks, filepath);
 	m_wireFrame = false;
 }
 
-// Destructor
+// DESTRUCTOR.
 Sphere::~Sphere()
 {
 	
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// FUNCTIONS.
 void Sphere::render()
 {
 	glEnable(GL_TEXTURE_2D);
@@ -39,16 +65,22 @@ void Sphere::render()
 	glDisable(GL_TEXTURE_2D);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Sphere::setWireFrameMode(bool isWireFrame)
 {
 	m_wireFrame = isWireFrame;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Sphere::initSphere(float radius, int slices, int stacks, char* filepath)
 {
 	initTextures(filepath);
 	generateSphereVerts(radius, slices, stacks);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Sphere::initTextures(char* filepath)
 {
@@ -67,6 +99,8 @@ void Sphere::initTextures(char* filepath)
 		printf("SOIL loading error: '%s'\n", SOIL_last_result());
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Sphere::generateSphereVerts(float radius, int lats, int longs)
 {
@@ -174,12 +208,16 @@ void Sphere::generateSphereVerts(float radius, int lats, int longs)
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Sphere::enableArrays()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Sphere::disableArrays()
 {
@@ -188,9 +226,13 @@ void Sphere::disableArrays()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Sphere::arrayDataArrangment()
 {
 	glVertexPointer(3, GL_FLOAT, 0, sphereVertices.data());
 	glNormalPointer(GL_FLOAT, 0, sphereNorms.data());
 	glTexCoordPointer(2, GL_FLOAT, 0, sphereTexCoords.data());
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 /*
-*
-* A class which controls the movement of a camera by either key press or
-* by both mouse and key press.
+* About this class
+*		- Controls the movement of a camera by either key press or
+*			by both mouse and key press.
 *
 * Original @author D. Green.
 *
@@ -96,4 +96,5 @@ private:
 
 	bool firstRender = true;
 };
-// END CLASS.
+
+///////////////////////////////////////////////////////////////////////////////////////////

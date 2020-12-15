@@ -1,10 +1,35 @@
+/*
+ * About this class
+ *		- Canlde object made from a procedurally generated:
+ *			- Cylinder
+ *			- Disc with extruded z-value.
+ *		- This class loads its own textures and draws itself using glDrawArrays(...).
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 #include "Candle.h"
 
-// Helps to get rid of seams on the texture.
-constexpr auto GL_CLAMP_TO_EDGE = 0x812F;
+///////////////////////////////////////////////////////////////////////////////////////////
 
-// Constructor, maybe change this to render just a basic sphere then have separate func to call
-// for setting things like translate, rotate, colour etc.
+// BEGIN REF
+/*
+ * Helps to get rid of seams on the texture.
+ * 
+ * Original @author - Dorbie, Feb 2006.
+ * 
+ * Adapted from - https://community.khronos.org/t/skybox-with-seams/34441/5
+ */
+constexpr auto GL_CLAMP_TO_EDGE = 0x812F;
+// END REF
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// CONSTRUCTOR.
 Candle::Candle(float resolution, float radius, float height)
 {
 	m_radius = radius;
@@ -15,13 +40,16 @@ Candle::Candle(float resolution, float radius, float height)
 	m_wireFrame = false;
 }
 
-// Destructor
+// DESTRUCTOR.
 Candle::~Candle()
 {
 	delete candleTop;
 	candleTop = nullptr;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// FUNCTIONS.
 void Candle::render()
 {
 	glPushMatrix();		
@@ -49,10 +77,14 @@ void Candle::render()
 	glDisable(GL_TEXTURE_2D);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Candle::setWireFrameMode(bool isWireFrame)
 {
 	m_wireFrame = isWireFrame;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Candle::initTextures()
 {
@@ -72,10 +104,14 @@ void Candle::initTextures()
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Candle::initCandleTop(float resolution, float radius)
 {
 	candleTop = new Disc(resolution, radius, m_candleTexPath, true, candleTopExtrusion);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Candle::generateCylVerts(float resolution, float radius, float height)
 {
@@ -167,12 +203,16 @@ void Candle::generateCylVerts(float resolution, float radius, float height)
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Candle::enableArrays()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Candle::disableArrays()
 {
@@ -181,9 +221,13 @@ void Candle::disableArrays()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Candle::arrayDataArrangment()
 {
 	glVertexPointer(3, GL_FLOAT, 0, cylVerts.data());
 	glNormalPointer(GL_FLOAT, 0, cylNorms.data());
 	glTexCoordPointer(2, GL_FLOAT, 0, cylTexCoords.data());
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////

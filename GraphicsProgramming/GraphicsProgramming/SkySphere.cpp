@@ -1,9 +1,35 @@
-#include "SkySphere.h"
-#include <stdio.h>
+/*
+ * About this class
+ *		- Skysphere object is created from a gluSphere using gluNewQuadric.
+ *		- This is then passed into a call list to be used from render.
+ *		- There are 2 seperate render functions depending on how you wish to render your skysphere:
+ *			- Option 1, a unit radius sphere around the camera, (Gave me problems with stencil work!)
+ *			- Option 2, a huge radius sphere that the entire world will live inside.
+ *		- This class loads its own textures and draws itself.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
 
-// Helps to get rid of seams on the texture.
+ ///////////////////////////////////////////////////////////////////////////////////////////
+
+ // BEGIN REF
+ /*
+  * Helps to get rid of seams on the texture.
+  *
+  * Original @author - Dorbie, Feb 2006.
+  *
+  * Adapted from - https://community.khronos.org/t/skybox-with-seams/34441/5
+  */
 constexpr auto GL_CLAMP_TO_EDGE = 0x812F;
+// END REF
 
+#include "SkySphere.h"
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// CONSTRUCTOR.
 SkySphere::SkySphere(float radius, float slices, float stacks)
 {
 	m_quadric = gluNewQuadric();
@@ -12,15 +38,21 @@ SkySphere::SkySphere(float radius, float slices, float stacks)
 	m_speed = 0.5f;
 }
 
+// DESTRUCTOR.
 SkySphere::~SkySphere()
 {
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// FUNCTIONS.
 void SkySphere::update(float dt)
 {
 	m_rotation += (m_speed * dt);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void SkySphere::render()
 {	
@@ -36,6 +68,8 @@ void SkySphere::render()
 	glEnable(GL_DEPTH_TEST);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void SkySphere::render2()
 {
 	glEnable(GL_TEXTURE_2D);
@@ -49,6 +83,8 @@ void SkySphere::render2()
 	glDisable(GL_TEXTURE_2D);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void SkySphere::initSkySphere(float radius, float slices, float stacks)
 {
 	initTextures(m_skySphereTexPath);
@@ -59,6 +95,8 @@ void SkySphere::initSkySphere(float radius, float slices, float stacks)
 		gluSphere(m_quadric, radius, slices, stacks);		// Generate ONCE! call as many times as I like from render callList!
 	glEndList();
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void SkySphere::initTextures(char* filepath)
 {
@@ -78,3 +116,5 @@ void SkySphere::initTextures(char* filepath)
 	
 	gluQuadricTexture(m_quadric, GLU_TRUE);									// Generate texture coords.
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////

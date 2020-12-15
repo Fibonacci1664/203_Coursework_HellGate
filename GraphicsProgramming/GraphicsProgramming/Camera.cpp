@@ -1,7 +1,7 @@
 /*
-* 
-* A class which controls the movement of a camera by either key press or
-* by both mouse and key press.
+* About this class
+*		- Controls the movement of a camera by either key press or
+*			by both mouse and key press.
 * 
 * Original @author D. Green.
 *
@@ -9,13 +9,13 @@
 * 
  */
 
- ///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
 
 #include "Camera.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// CONSTRUCTOR / DESTRUCTOR
+// CONSTRUCTOR
 Camera::Camera(Input* in) : input(in)
 {
 	moveSpeed = 10.0f;
@@ -34,15 +34,15 @@ Camera::Camera(Input* in) : input(in)
 	initRightVec();
 }
 
+// DESTRUCTOR
 Camera::~Camera()
 {
 
 }
-// END CONSTRUCTOR / DESTRUCTOR
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// CLASS FUNCTIONS
+// FUNCTIONS
 void Camera::handleInput(float dt)
 {
 	if (firstRender)

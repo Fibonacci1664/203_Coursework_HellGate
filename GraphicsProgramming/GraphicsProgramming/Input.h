@@ -1,8 +1,19 @@
-// Input class
-// Stores current keyboard and mouse state include, pressed keys, mouse button pressed and mouse position.
-// @author Paul Robertson
+/*
+ * About this class
+ *		- Stores current keyboard and mouse state.
+ *		- Stores pressed keys, mouse button pressed and mouse position.
+ *
+ * Original @author Paul Robertson
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 #ifndef INPUT_H
 #define INPUT_H
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 class Input
 {
@@ -37,7 +48,8 @@ private:
 	// Mouse struct object.
 	bool keys[256]{ false };
 	Mouse mouse;
-
 };
 
 #endif
+
+///////////////////////////////////////////////////////////////////////////////////////////

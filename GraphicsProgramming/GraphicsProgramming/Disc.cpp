@@ -1,5 +1,21 @@
+/*
+ * About this class
+ *		- Generic disc object.
+ *		- Procedurally generates all vertices, norms and tex coords.
+ *		- Uses glDrawArrays(...) to draw itself.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 #include "Disc.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// CONSTRCUTOR.
 Disc::Disc(float resolution, float radius, char* texturePath, bool modifyZ, float zVal)
 {
 	m_modifyZValue = modifyZ;
@@ -9,11 +25,15 @@ Disc::Disc(float resolution, float radius, char* texturePath, bool modifyZ, floa
 	generateDisc(resolution, radius);
 }
 
+// DESTRUCTOR.
 Disc::~Disc()
 {
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// FUNCTIONS.
 void Disc::render()
 {
 	glEnable(GL_TEXTURE_2D);
@@ -24,6 +44,8 @@ void Disc::render()
 	disableArrays();
 	glDisable(GL_TEXTURE_2D);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Disc::initTexture(char* texturePath)
 {
@@ -43,12 +65,16 @@ void Disc::initTexture(char* texturePath)
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Disc::generateDisc(float resolution, float radius)
 {
 	generateDiscVerts(resolution, radius);
 	generateDiscNorms();
 	generateDiscTexCoords();
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Disc::generateDiscVerts(float resolution, float radius)
 {
@@ -162,6 +188,8 @@ void Disc::generateDiscVerts(float resolution, float radius)
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Disc::generateDiscNorms()
 {
 	for (int i = 0; i < numOfDiscVerts; ++i)
@@ -179,6 +207,8 @@ void Disc::generateDiscNorms()
 		}
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Disc::generateDiscTexCoords()
 {
@@ -216,12 +246,16 @@ void Disc::generateDiscTexCoords()
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Disc::enableArrays()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Disc::disableArrays()
 {
@@ -230,9 +264,13 @@ void Disc::disableArrays()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Disc::arrayDataArrangment()
 {
 	glVertexPointer(3, GL_FLOAT, 0, discVerts);
 	glNormalPointer(GL_FLOAT, 0, discNorms);
 	glTexCoordPointer(2, GL_FLOAT, 0, discTexCoords);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////

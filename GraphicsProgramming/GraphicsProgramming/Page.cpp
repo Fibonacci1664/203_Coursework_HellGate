@@ -1,5 +1,21 @@
+/*
+ * About this class
+ *		- Page object which create ritual pages on the altar.
+ *		- This object is rendered in immediate mode using glVertex3f(...).
+ *		- This object loads its own textures and renders itself.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 #include "Page.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// CONSTRUCTOR.
 Page::Page(float pageWidthX, float pageHeightZ, char* pageTexPath)
 {
 	initTextures(pageTexPath);
@@ -7,11 +23,15 @@ Page::Page(float pageWidthX, float pageHeightZ, char* pageTexPath)
 	m_pageWidth = pageWidthX;
 }
 
+// DESTRUCTOR.
 Page::~Page()
 {
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// FUNCTIONS.
 void Page::render()
 {
 	glEnable(GL_TEXTURE_2D);
@@ -38,6 +58,8 @@ void Page::render()
 	glDisable(GL_TEXTURE_2D);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Page::initTextures(char* pageTexPath)
 {
 	m_texture = SOIL_load_OGL_texture
@@ -55,3 +77,5 @@ void Page::initTextures(char* pageTexPath)
 		printf("SOIL loading error: '%s'\n", SOIL_last_result());
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////

@@ -1,8 +1,20 @@
-// Scene class. Configures a basic 3D scene.
-// Interfaces with the Input class to handle user input
-// Calculates and outputs Frames Per Second (FPS) rendered.
-// Important functions are the constructor (initialising the scene), 
-// update (for process user input and updating scene objects) and render (renders scene).
+/*
+ * About this class
+ *		- The main scene, initilises everything in the scene including req. OpenGL settings.
+ *		- Interfaces with the Input class to handle user input.
+ *		- Handles some input directly for scene class related features.
+ *		- Loads in shadow textures as there is no stand alone shadow class.
+ *		- Updates cam and skysphere obejcts.
+ *		- Calculates FPS.
+ *		- Renders all objects in scene in specific order.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 #ifndef _SCENE_H
 #define _SCENE_H
 
@@ -34,6 +46,7 @@
 #include "Material.h"
 #include "SpellEffect.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////
 
 class Scene
 {
@@ -101,7 +114,7 @@ protected:
 	GLfloat brownDwarfLightPosition_4[4] = { 0, -40.f, 0, 1 };			// w = 0 = direction, w = 1 = point light
 	GLfloat coalGlowLightPosition[4] = { 0, 6.0f, 0, 1 };			// w = 0 = direction, w = 1 = point light
 
-	////////////////////////////////// CAMERA STUFF //////////////////////////////////
+	////////////////////////////////// CAMERA STUFF /////////////////////////////////
 	// CAMERA FUNCS
 	void initCamera();
 
@@ -118,6 +131,8 @@ protected:
 	char cameraLookXText[40];
 	char cameraLookYText[40];
 	char cameraLookZText[40];
+
+	////////////////////////////////// CREATED GEOMETRY STUFF ////////////////////////
 
 	////////////////////////////////// SKYSPHERE STUFF ///////////////////////////////
 	// SKYSPHERE FUNCS
@@ -155,9 +170,6 @@ protected:
 	// COAL VARS
 	Sphere* lumpOfCoal;
 	char* m_hotCoalTexPath = "gfx/textures/hotCoal.jpg";
-
-	////////////////////////////////// CREATED GEOMETRY STUFF /////////////////////////
-
 
 	////////////////////////////////// CAGE STUFF /////////////////////////////////////
 	// CAGE FUNCS
@@ -313,3 +325,5 @@ protected:
 };
 
 #endif
+
+///////////////////////////////////////////////////////////////////////////////////////////

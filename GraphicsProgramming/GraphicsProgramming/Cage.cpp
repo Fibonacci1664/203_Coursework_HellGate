@@ -1,20 +1,43 @@
-#include "Cage.h"
-#include <stdio.h>
+/*
+ * About this class
+ *		- Cage object uses Vertex3f(...) to draw each face of a cuebe
+ *		- There are 2 cubes drawn, one with the front face culled and
+ *			the other with the back face culled. This ensure correctly
+ *			drawn cages as the camera is roated around them.
+ *		- This class loads its own textures and draws itself.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+#include "Cage.h"
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// CONSTRUCTOR.
 Cage::Cage()
 {
 	initTextures();
 }
 
+// DESTRUCTOR.
 Cage::~Cage()
 {
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// FUNCTIONS
 void Cage::update(float dt)
 {
 
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Cage::render(float scale)
 {
@@ -44,6 +67,8 @@ void Cage::render(float scale)
 		glDisable(GL_BLEND);
 	glPopMatrix();
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Cage::drawCage(float scale)
 {
@@ -137,6 +162,8 @@ void Cage::drawCage(float scale)
 	glEnd();
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Cage::initTextures()
 {
 	m_texture = SOIL_load_OGL_texture
@@ -154,3 +181,5 @@ void Cage::initTextures()
 		printf("SOIL loading error: '%s'\n", SOIL_last_result());
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////

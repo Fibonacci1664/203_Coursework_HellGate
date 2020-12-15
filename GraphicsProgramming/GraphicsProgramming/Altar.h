@@ -1,5 +1,22 @@
+/*
+ * About this class
+ *		- Altar object consisting of two components
+ *			- Base - CubeBI object
+ *			- Top - CubeBI object
+ *		- This class loads its own textures and draws itself.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 #include "CubeBI.h"
+#include <stdio.h>
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 class Altar
 {
@@ -23,3 +40,4 @@ private:
 	CubeBI* top;
 };
 
+///////////////////////////////////////////////////////////////////////////////////////////

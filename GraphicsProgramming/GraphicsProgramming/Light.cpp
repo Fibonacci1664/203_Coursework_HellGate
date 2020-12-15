@@ -1,15 +1,38 @@
+/*
+ * About this class
+ *		- Contains functions to render lights of type:
+ *			- Directional.
+ *			- Point.
+ *			- Spot.
+ *			- Specular.
+ *		- (NOTE!) Lights are enabled from within the functions when rendered.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 #include "Light.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// CONSTRUCTOR.
 Light::Light()
 {
 
 }
 
+// DESTRUCTOR.
 Light::~Light()
 {
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// FUNCTIONS.
 void Light::renderDirectionalLight(GLenum lightNum, GLfloat diffuse[], GLfloat position[])
 {
 	glLightfv(lightNum, GL_DIFFUSE, diffuse);
@@ -17,6 +40,7 @@ void Light::renderDirectionalLight(GLenum lightNum, GLfloat diffuse[], GLfloat p
 	glEnable(lightNum);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Light::renderPointLight(GLenum lightNum, GLfloat ambience[], GLfloat diffuse[], GLfloat position[])
 {
@@ -25,6 +49,8 @@ void Light::renderPointLight(GLenum lightNum, GLfloat ambience[], GLfloat diffus
 	glLightfv(lightNum, GL_POSITION, position);
 	glEnable(lightNum);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Light::renderSpotLight(GLenum lightNum, GLfloat ambience[], GLfloat diffuse[], GLfloat position[], GLfloat spot_dir[])
 {
@@ -37,6 +63,8 @@ void Light::renderSpotLight(GLenum lightNum, GLfloat ambience[], GLfloat diffuse
 	glEnable(lightNum);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Light::renderSpecularLight(GLenum lightNum, GLfloat ambience[], GLfloat diffuse[], GLfloat position[], GLfloat specular[])
 {
 	glLightfv(lightNum, GL_AMBIENT, ambience);
@@ -46,9 +74,13 @@ void Light::renderSpecularLight(GLenum lightNum, GLfloat ambience[], GLfloat dif
 	glEnable(lightNum);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
 void Light::setAttenuation(GLenum lightNum, GLfloat constantVal, GLfloat linearVal, GLfloat quadraticVal)
 {
 	glLightf(lightNum, GL_CONSTANT_ATTENUATION, constantVal);
 	glLightf(lightNum, GL_LINEAR_ATTENUATION, linearVal);
 	glLightf(lightNum, GL_QUADRATIC_ATTENUATION, quadraticVal);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////

@@ -1,3 +1,17 @@
+/*
+ * About this class
+ *		- Canlde object made from a procedurally generated:
+ *			- Cylinder
+ *			- Disc with extruded z-value.
+ *		- This class loads its own textures and draws itself using glDrawArrays(...).
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 #include "glut.h"
 #include <gl/GL.h>
@@ -7,6 +21,7 @@
 #include <vector>
 #include "Disc.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////
 
 class Candle
 {
@@ -42,3 +57,4 @@ private:
 	std::vector<float> cylTexCoords;
 };
 
+///////////////////////////////////////////////////////////////////////////////////////////

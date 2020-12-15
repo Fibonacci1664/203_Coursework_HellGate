@@ -1,6 +1,21 @@
-// Model class, represents a loaded OBJ model
-// handles the loading/processing of the model file. Also loads and stores its own texture
-// NOT complete, for students to complete. Model data requires being sorted and the render function needs completed.
+/*
+ * About this class
+ *		- Handles all things Model related, namely:
+ *			- Loading model data (.obj).
+ *			- Parsing model data (tris).
+ *			- Storing model data in new data structures.
+ *			- Loading textures (NOT .mtl files).
+ *			- Rendering model using glDrawArrays(...).
+ *
+ * Original @author Mark Ropper / Paul Robertson
+ *
+ * Updated by @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+ ///////////////////////////////////////////////////////////////////////////////////////////
+
 #ifndef _MODEL_H_
 #define _MODEL_H_
 
@@ -16,6 +31,8 @@ using namespace std;
 #include <vector>
 #include "Vector3.h"
 #include "SOIL.h"
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 class Model
 {
@@ -47,3 +64,5 @@ private:
 };
 
 #endif
+
+///////////////////////////////////////////////////////////////////////////////////////////

@@ -1,20 +1,42 @@
-#include "Plank.h"
-#include <stdio.h>
+/*
+ * About this class
+ *		- Plank object made from:
+ *			- A CubeBI (Build Index) object.
+ *		- This class loads its own textures and draws itself calling its parent render
+ *			this in turn uses glDrawElements(...).
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
 
+//////////////////////////////////////////////////////////////////////////////////////////
+
+#include "Plank.h"
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// CONSTRUCTOR.
 Plank::Plank()
 {
 	initTextures();
 }
 
+// DESTRUCTOR.
 Plank::~Plank()
 {
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// FUNCTIONS.
 void Plank::render()
 {
 	CubeBI::render(m_texture);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void Plank::initTextures()
 {
@@ -33,3 +55,5 @@ void Plank::initTextures()
 		printf("SOIL loading error: '%s'\n", SOIL_last_result());
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////

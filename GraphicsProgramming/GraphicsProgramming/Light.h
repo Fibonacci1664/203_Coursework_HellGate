@@ -1,8 +1,25 @@
-#pragma once
+/*
+ * About this class
+ *		- Contains functions to render lights of type:
+ *			- Directional.
+ *			- Point.
+ *			- Spot.
+ *			- Specular.
+ *		- (NOTE!) Lights are enabled from within the functions when rendered.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
 #include "glut.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 class Light
 {
@@ -22,3 +39,4 @@ private:
 
 };
 
+///////////////////////////////////////////////////////////////////////////////////////////

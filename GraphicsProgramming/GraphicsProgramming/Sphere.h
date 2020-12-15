@@ -1,11 +1,26 @@
-#pragma once
+/*
+ * About this class
+ *		- Sphere object is a procedurally generated sphere.
+ *		- Stores the verts, norms and texCoords in vectors.
+ *		- Renders using glDrawArrays(...).
+ *		- Takes care of loading its own textures etc.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
 
+///////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
 #include "glut.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "SOIL.h"
 #include <stdio.h>
 #include <vector>
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 class Sphere
 {
@@ -38,3 +53,5 @@ private:
 	std::vector<float> sphereNorms;
 	std::vector<float> sphereTexCoords;
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////

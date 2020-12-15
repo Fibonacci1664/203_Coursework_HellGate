@@ -1,3 +1,16 @@
+/*
+ * About this class
+ *		- Generic disc object.
+ *		- Procedurally generates all vertices, norms and tex coords.
+ *		- Uses glDrawArrays(...) to draw itself.
+ *
+ * Original @author D. Green.
+ *
+ * © D. Green. 2020.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 #include "glut.h"
 #include <gl/GL.h>
@@ -5,6 +18,8 @@
 #include "SOIL.h"
 #include <math.h>
 #include <stdio.h>
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 class Disc
 {
@@ -43,3 +58,5 @@ private:
 
 	GLuint m_texture;
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////
