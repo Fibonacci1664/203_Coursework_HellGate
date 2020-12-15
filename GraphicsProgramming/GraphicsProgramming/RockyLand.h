@@ -10,10 +10,10 @@ public:
 
 	void render();
 
-	// GROUND MODEL FUNCS
+private:
+
 	void initRockyLand();
 
-	// GROUND MODEL VARS
 	Model* rockyLand;
 	char* rockyLandFilePath = "models/rocky_outcrop.obj";
 	char* rockyLandTexPath = "gfx/textures/coobleGround.jpg";

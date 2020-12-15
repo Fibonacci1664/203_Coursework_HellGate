@@ -36,6 +36,19 @@ void SkySphere::render()
 	glEnable(GL_DEPTH_TEST);
 }
 
+void SkySphere::render2()
+{
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, m_texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	// Takes care of horrible seams on the texture mapping.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);	// Takes care of horrible seams on the texture mapping.				
+	glRotatef(m_rotation, 0.5f, 0.5f, 0);
+	glScalef(500.0f, 500.0f, 500.0f);			// Scale up the sky sphere to a 500 radius sphere. Far plane is set to 1000.
+	glCallList(m_sphereList);
+	glDisable(GL_TEXTURE_2D);
+}
+
 void SkySphere::initSkySphere(float radius, float slices, float stacks)
 {
 	initTextures(m_skySphereTexPath);

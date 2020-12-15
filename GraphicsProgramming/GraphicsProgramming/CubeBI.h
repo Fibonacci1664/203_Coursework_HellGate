@@ -12,11 +12,10 @@ public:
 
 	void render(GLuint texture);
 
+private:
 	void enableArrays();
 	void disableArrays();
 	void arrayDataArrangment();
-
-private:
 
 	// USE THIS FOR RENDER METHODS.
 	float verts[72] = { -1.0,	-1.0,	1.0,		// Vertex #0

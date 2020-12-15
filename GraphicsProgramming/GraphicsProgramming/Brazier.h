@@ -4,16 +4,15 @@
 class Brazier
 {
 public:
-
 	Brazier();
 	~Brazier();
 
 	void render();
 
-	// GROUND MODEL FUNCS
+private:
+
 	void initBrazier();
 
-	// GROUND MODEL VARS
 	Model* brazier;
 	char* brazierFilePath = "models/brazier.obj";
 	char* brazierTexPath = "gfx/textures/blackMetal.jpg";

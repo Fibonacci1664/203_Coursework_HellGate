@@ -34,6 +34,8 @@ void Disc::initTexture(char* texturePath)
 		SOIL_CREATE_NEW_ID, SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
 	);
 
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
 	// Check for an error during the load process.
 	if (m_texture == 0)
 	{

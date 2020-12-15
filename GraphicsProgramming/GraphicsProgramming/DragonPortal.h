@@ -10,10 +10,10 @@ public:
 
 	void render();
 
-	// GROUND MODEL FUNCS
+private:
+
 	void initDragonPortal();
 
-	// GROUND MODEL VARS
 	Model* dragonPortal;
 	char* dragonPortalFilePath = "models/dragon_portal.obj";
 	char* dragonPortalTexPath = "gfx/textures/DragonJawPortal_Diffuse.jpg";

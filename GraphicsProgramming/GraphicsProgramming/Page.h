@@ -15,6 +15,7 @@ public:
 
 private:
 	void initTextures(char* pageTexPath);
+
 	GLuint m_texture;
 	float m_pageHeight;
 	float m_pageWidth;

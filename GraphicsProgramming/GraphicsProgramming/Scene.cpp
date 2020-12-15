@@ -17,11 +17,16 @@ Scene::Scene(Input *in)
 	camera_1 = false;
 	camera_2 = false;
 	motionCam = true;
+	m_wireFrame = false;
+	pageClicked = false;
 	cameraZoom = 0;
 	cameraZoomSpeed = 50.0f;
-	m_wireFrame = false;
 	m_planetRotation = 0;
 	m_planetRotationSpeed = 5.0f;
+	spellRotation = 0;
+	spellRotationSpeed = 30.0f;
+	spellEffectAlpha = 0;
+
 	initCamera();
 	initSkySphere();
 	initGround();
@@ -37,6 +42,7 @@ Scene::Scene(Input *in)
 	initSkull();
 	initCandle();
 	initPage();
+	initSpellEffect();
 
 
 
@@ -112,6 +118,9 @@ Scene::~Scene()
 
 	delete page_3;
 	page_3 = nullptr;
+
+	delete spell;
+	spell = nullptr;
 }
 
 void Scene::handleInput(float dt)
@@ -154,11 +163,43 @@ void Scene::handleInput(float dt)
 	{
 		cameraZoom -= cameraZoomSpeed * dt;
 	}
+
+	// This is for interactivity with the spell page and effect.
+	// Make sure the user is at the correct location.
+	if ((cam->getPos().x > 9.0f && cam->getPos().x < 11.0f) &&
+		(cam->getPos().y > 6.0f && cam->getPos().y < 8.0f) &&
+		(cam->getPos().z > 8.0f && cam->getPos().z < 10.0f))
+	{
+		// Make sure the user is looking the correct direction.
+		if ((cam->getLookAt().x > 9.5f && cam->getLookAt().x < 10.5f) &&
+			(cam->getLookAt().y > 5.5f && cam->getLookAt().y < 6.5f) &&
+			(cam->getLookAt().z > 9.0f && cam->getLookAt().z < 10.5f))
+		{
+			// If all the condtions above are satisfied, then we must have the cursor over the ritual page.
+			// If we click on it, start the spell effect.
+			if (input->isMouseLDown())
+			{
+				pageClicked = true;
+			}
+		}
+	}
+
+	//if (pageClicked)
+	//{
+	//	spellEffectAlpha += dt;
+
+	//	// Clamp alpha to 1.0f.
+	//	if (spellEffectAlpha > 1.0f)
+	//	{
+	//		spellEffectAlpha = 1.0f;
+	//	}
+	//}
 }
 
 void Scene::update(float dt)
 {
 	m_planetRotation += (m_planetRotationSpeed * dt);
+	spellRotation += (spellRotationSpeed * dt);
 
 	// update scene related variables.
 	cam->update(dt);
@@ -179,11 +220,13 @@ void Scene::render()
 
 	if (camera_1)
 	{
+		renderSkySphere2();
 		// Planet cam, zoom only.
-		gluLookAt(0.0f, 10.0f + cameraZoom, cameraZoom, 0, -100.0f, -200.0f, 0.0f, 1.0f, 0.0f);
+		gluLookAt(0.0f, (10.0f + cameraZoom), cameraZoom, 0, -100.0f, -200.0f, 0.0f, 1.0f, 0.0f);
 	}
 	else if(camera_2)
 	{
+		renderSkySphere2();
 		// Static cam, looking at altar.
 		gluLookAt(10.0f, 10.0f, 0.0f, 10.0f, -15.0f, 85.0f, 0.0f, 1.0f, 0.0f);
 	}
@@ -193,9 +236,7 @@ void Scene::render()
 			cam->getLookAt().x, cam->getLookAt().y, cam->getLookAt().z,
 			cam->getUp().x, cam->getUp().y, cam->getUp().z);
 	}
-	
-	
-	
+		
 	// Render geometry/scene here -------------------------------------
 	// Build stencil for dragon portal.
 	//buildStencil();
@@ -206,13 +247,16 @@ void Scene::render()
 	// Build real world.
 	//buildRealUniverse();
 
-	// Render a unit skysphere around the camera.
-	renderSkySphere();
+	// Render a unit skysphere around the camera when using the normal motion cam.
+	if (motionCam)
+	{
+		renderSkySphere();
+	}
 
 	// Render a plane of cobble stone ground.
 	renderGround();
 
-	// Render a planetary system
+	// Render a planetary system.
 	renderPlanetarySystem();
 
 	// Render crates.
@@ -221,10 +265,10 @@ void Scene::render()
 	// Render planks.
 	renderPlanks();
 
-	// Render a cart wheel
+	// Render a cart wheel/
 	renderCoin();
 
-	// Render a dragon portal
+	// Render a dragon portal/
 	renderDragonPortal();
 
 	// Render braziers either side of the dragon portal.
@@ -233,7 +277,7 @@ void Scene::render()
 	// Render lumps of coal glowing in the braziers.
 	renderCoal();
 
-	// Render the altar
+	// Render the altar/
 	renderAltar();
 
 	// Render skulls sitting on the altar.
@@ -245,7 +289,8 @@ void Scene::render()
 	// Render evil ritual pages on the altar.
 	renderPages();
 
-
+	// Render a spell effect above the altar/
+	renderSpellEffect();
 	
 
 
@@ -298,6 +343,13 @@ void Scene::renderSkySphere()
 	glPushMatrix();
 		glTranslatef(cam->getPos().x, cam->getPos().y, cam->getPos().z);
 		skySphere->render();
+	glPopMatrix();
+}
+
+void Scene::renderSkySphere2()
+{
+	glPushMatrix();
+		skySphere->render2();
 	glPopMatrix();
 }
 
@@ -646,6 +698,30 @@ void Scene::renderCandles()
 
 //////////////////////////////////////////////////////////// CANDLE STUFF END /////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////// SPELL STUFF //////////////////////////////////////////////////////////////
+
+void  Scene::initSpellEffect()
+{
+	spell = new SpellEffect();
+}
+
+void  Scene::renderSpellEffect()
+{
+	if (pageClicked)
+	{
+		glPushMatrix();
+			glTranslatef(10.0f, 5.0f, 12.0f);
+			glRotatef(spellRotation, 0, 1.0f, 0);
+			//glColor4f(1.0f, 1.0f, 1.0f, spellEffectAlpha);
+			glEnable(GL_BLEND);
+			spell->render();
+			glDisable(GL_BLEND);
+		glPopMatrix();
+	}
+}
+
+//////////////////////////////////////////////////////////// SPELL STUFF END //////////////////////////////////////////////////////////
+
 //////////////////////////////////////////////////////////// PAGES STUFF //////////////////////////////////////////////////////////////
 
 void Scene::initPage()
@@ -660,7 +736,9 @@ void Scene::renderPages()
 	glPushMatrix();
 		glTranslatef(10.35f, 4.0f, 12.4f);
 		glRotatef(180.0f, 0, 1.0f, 0);
+		glEnable(GL_BLEND);
 		page_1->render();
+		glDisable(GL_BLEND);
 
 		glPushMatrix();
 			glTranslatef(1.5f, 0, 0);
@@ -948,7 +1026,7 @@ void Scene::resize(int w, int h)
 	float ratio = (float)w / (float)h;
 	fov = 45.0f;
 	nearPlane = 0.1f;
-	farPlane = 500.0f;
+	farPlane = 1000.0f;
 
 	// Use the Projection Matrix
 	glMatrixMode(GL_PROJECTION);
@@ -979,6 +1057,29 @@ void Scene::calculateFPS()
 	}
 }
 
+void Scene::renderCameraPosText()
+{
+	// Render current camera POS values.
+	sprintf_s(cameraPosXText, "Camera Pos X: %f", cam->getPos().x);
+	displayText(-1.f, 0.84f, 1.f, 0.f, 0.f, cameraPosXText);
+
+	sprintf_s(cameraPosYText, "Camera Pos Y: %f", cam->getPos().y);
+	displayText(-1.f, 0.78f, 1.f, 0.f, 0.f, cameraPosYText);
+
+	sprintf_s(cameraPosZText, "Camera Pos Z: %f", cam->getPos().z);
+	displayText(-1.f, 0.72f, 1.f, 0.f, 0.f, cameraPosZText);
+
+	// Render current camera LOOKAT values.
+	sprintf_s(cameraLookXText, "Camera LookAt X: %f", cam->getLookAt().x);
+	displayText(-1.f, 0.66f, 1.f, 0.f, 0.f, cameraLookXText);
+
+	sprintf_s(cameraLookYText, "Camera LookAt Y: %f", cam->getLookAt().y);
+	displayText(-1.f, 0.60f, 1.f, 0.f, 0.f, cameraLookYText);
+
+	sprintf_s(cameraLookZText, "Camera LookAt Z: %f", cam->getLookAt().z);
+	displayText(-1.f, 0.54f, 1.f, 0.f, 0.f, cameraLookZText);
+}
+
 // Compiles standard output text including FPS and current mouse position.
 void Scene::renderTextOutput()
 {
@@ -986,6 +1087,7 @@ void Scene::renderTextOutput()
 	sprintf_s(mouseText, "Mouse: %i, %i", input->getMouseX(), input->getMouseY());
 	displayText(-1.f, 0.96f, 1.0f, 1.0f, 1.0f, mouseText);
 	displayText(-1.f, 0.90f, 1.0f, 1.0f, 1.0f, fps);
+	renderCameraPosText();
 }
 
 // Renders text to screen. Must be called last in render function (before swap buffers)

@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_STENCIL);
 	//glutInitWindowPosition(100, 100);
 	glutInitWindowSize(WIDTH, HEIGHT);
-	glutCreateWindow("SOME SCENE NAME!");
+	glutCreateWindow("HELL GATE");
 	
 	// Register callback functions for change in size and rendering.
 	glutDisplayFunc(renderScene);

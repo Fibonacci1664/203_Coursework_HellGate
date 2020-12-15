@@ -16,6 +16,8 @@ public:
 
 	void setWireFrameMode(bool isWireFrame);
 	void render();
+
+private:
 	void initTextures();
 	void initCandleTop(float resolution, float radius);
 	void generateCylVerts(float resolution, float radius, float height);

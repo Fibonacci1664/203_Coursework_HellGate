@@ -10,10 +10,10 @@ public:
 
 	void render();
 
-	// GROUND MODEL FUNCS
+private:
+
 	void initSkull();
 
-	// GROUND MODEL VARS
 	Model* skull;
 	char* skullFilePath = "models/skull_dec.obj";
 	char* skullTexPath = "gfx/textures/skull_diffuse.jpg";

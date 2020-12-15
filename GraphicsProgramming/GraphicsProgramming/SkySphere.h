@@ -13,6 +13,7 @@ public:
 	
 	void update(float dt);
 	void render();
+	void render2();
 
 protected:
 

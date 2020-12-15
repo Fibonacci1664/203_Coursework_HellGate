@@ -15,7 +15,6 @@ Page::~Page()
 void Page::render()
 {
 	glEnable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 
 	glBegin(GL_QUADS);
@@ -47,6 +46,8 @@ void Page::initTextures(char* pageTexPath)
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID, SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
 	);
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 	// Check for an error during the load process.
 	if (m_texture == 0)

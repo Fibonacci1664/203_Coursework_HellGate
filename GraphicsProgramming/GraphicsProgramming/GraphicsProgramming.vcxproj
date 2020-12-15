@@ -105,9 +105,9 @@
     <ClCompile Include="Plank.cpp" />
     <ClCompile Include="RockyLand.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Shape.cpp" />
     <ClCompile Include="Skull.cpp" />
     <ClCompile Include="SkySphere.cpp" />
+    <ClCompile Include="SpellEffect.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
@@ -130,10 +130,10 @@
     <ClInclude Include="Plank.h" />
     <ClInclude Include="RockyLand.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="Shape.h" />
     <ClInclude Include="Skull.h" />
     <ClInclude Include="SkySphere.h" />
     <ClInclude Include="SOIL.h" />
+    <ClInclude Include="SpellEffect.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>

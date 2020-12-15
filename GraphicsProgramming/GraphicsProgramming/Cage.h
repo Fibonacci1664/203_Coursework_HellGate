@@ -15,10 +15,10 @@ public:
 
 	void update(float dt);
 	void render(float scale);
-	void drawCage(float scale);
 
 private:
 	void initTextures();
+	void drawCage(float scale);
 
 	GLuint m_texture;
 	char* m_cageTexPath = "gfx/textures/rustyIronBars.png";

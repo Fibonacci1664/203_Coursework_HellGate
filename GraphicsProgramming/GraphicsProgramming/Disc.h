@@ -14,8 +14,9 @@ public:
 	~Disc();
 
 	void render();
-	void initTexture(char* texturePath);
 
+private:
+	void initTexture(char* texturePath);
 	void generateDisc(float resolution, float radius);
 	void generateDiscVerts(float resolution, float radius);
 	void generateDiscNorms();
@@ -41,7 +42,4 @@ public:
 	float discTexCoords[501][2]{ {0} };
 
 	GLuint m_texture;
-
-private:
-
 };

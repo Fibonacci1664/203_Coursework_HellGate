@@ -32,6 +32,7 @@
 #include "Candle.h"
 #include "Page.h"
 #include "Material.h"
+#include "SpellEffect.h"
 
 
 class Scene
@@ -59,6 +60,7 @@ protected:
 	void calculateFPS();
 	void toggleWireFrame();
 	void initTextures();
+	void renderCameraPosText();
 
 	bool m_wireFrame;
 	
@@ -110,11 +112,18 @@ protected:
 	bool motionCam;
 	float cameraZoom;
 	float cameraZoomSpeed;
+	char cameraPosXText[40];
+	char cameraPosYText[40];
+	char cameraPosZText[40];
+	char cameraLookXText[40];
+	char cameraLookYText[40];
+	char cameraLookZText[40];
 
 	////////////////////////////////// SKYSPHERE STUFF ///////////////////////////////
 	// SKYSPHERE FUNCS
 	void initSkySphere();
 	void renderSkySphere();
+	void renderSkySphere2();
 	
 	// SKYSPHERE VARS
 	SkySphere* skySphere;
@@ -197,6 +206,17 @@ protected:
 	GLfloat mat_diff_col[4] = { 0.878f, 0.616f, 0.216f, 1.0f };		// ALWAYS KEEP SPECULAR AND DIFFUSE SIMILAR IF NOT IDENTICAL.
 	GLfloat mat_spec_col[4] = { 0.878f, 0.616f, 0.216f, 1.0f };
 	GLfloat mat_emission_col[4] = { 0, 0, 0, 1.0f };
+
+	// SPELL FUNCS
+	void initSpellEffect();
+	void renderSpellEffect();
+
+	// SPELL VARS
+	SpellEffect* spell;
+	float spellRotation;
+	float spellRotationSpeed;
+	bool pageClicked;
+	float spellEffectAlpha;
 
 	////////////////////////////////// ALTAR STUFF ////////////////////////////////////
 	// ALTAR FUNCS

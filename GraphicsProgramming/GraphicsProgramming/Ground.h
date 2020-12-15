@@ -9,11 +9,11 @@ public:
 
 	void render();
 
-	// GROUND MODEL FUNCS
+private:
+
 	void initGround();
 	void renderCobblePlane();
 
-	// GROUND MODEL VARS
 	Model* cobbleGround;
 	char* cobbleGroundFilePath = "models/cobbleDecTri.obj";
 	char* cobbleGroundTexPath = "gfx/textures/coobleGround.jpg";

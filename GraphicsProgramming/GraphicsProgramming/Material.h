@@ -13,7 +13,6 @@ public:
 	void createMaterial(GLfloat mat_amb_col[], GLfloat mat_diff_col[], GLfloat mat_spec_col[], GLfloat shininess);
 	void createEmisssionMat(GLfloat mat_amb_col[], GLfloat mat_diff_col[], GLfloat mat_spec_col[], GLfloat emission[], GLfloat shininess);
 
-
 protected:
 
 private:
