@@ -740,7 +740,6 @@ void  Scene::renderSpellEffect()
 		glPushMatrix();
 			glTranslatef(10.0f, 5.0f, 12.0f);
 			glRotatef(spellRotation, 0, 1.0f, 0);
-			//glColor4f(1.0f, 1.0f, 1.0f, spellEffectAlpha);
 			glEnable(GL_BLEND);
 			spell->render();
 			glDisable(GL_BLEND);
