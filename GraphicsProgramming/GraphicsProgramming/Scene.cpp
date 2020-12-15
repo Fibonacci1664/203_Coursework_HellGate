@@ -44,7 +44,6 @@ Scene::Scene(Input *in)
 	m_planetRotationSpeed = 5.0f;
 	spellRotation = 0;
 	spellRotationSpeed = 30.0f;
-	spellEffectAlpha = 0;
 
 	initCamera();
 	initSkySphere();
@@ -199,17 +198,6 @@ void Scene::handleInput(float dt)
 			}
 		}
 	}
-
-	//if (pageClicked)
-	//{
-	//	spellEffectAlpha += dt;
-
-	//	// Clamp alpha to 1.0f.
-	//	if (spellEffectAlpha > 1.0f)
-	//	{
-	//		spellEffectAlpha = 1.0f;
-	//	}
-	//}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

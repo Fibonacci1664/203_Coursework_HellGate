@@ -228,7 +228,6 @@ protected:
 	float spellRotation;
 	float spellRotationSpeed;
 	bool pageClicked;
-	float spellEffectAlpha;
 
 	////////////////////////////////// ALTAR STUFF ////////////////////////////////////
 	// ALTAR FUNCS
