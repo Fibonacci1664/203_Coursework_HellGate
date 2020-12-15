@@ -44,9 +44,6 @@ Scene::Scene(Input *in)
 	initPage();
 	initSpellEffect();
 
-
-
-
 	// THIS IS LAST.
 	initCage();
 }
@@ -239,18 +236,19 @@ void Scene::render()
 		
 	// Render geometry/scene here -------------------------------------
 	// Build stencil for dragon portal.
-	//buildStencil();
+	buildStencil();
 	
 	// Build mirror world inside the dragon protal.
-	//buildMirrorUniverse();
+	buildMirrorUniverse();
 
 	// Build real world.
-	//buildRealUniverse();
+	buildRealUniverse();
 
 	// Render a unit skysphere around the camera when using the normal motion cam.
 	if (motionCam)
 	{
-		renderSkySphere();
+		//renderSkySphere();
+		renderSkySphere2();
 	}
 
 	// Render a plane of cobble stone ground.
@@ -292,8 +290,6 @@ void Scene::render()
 	// Render a spell effect above the altar/
 	renderSpellEffect();
 	
-
-
 	// Render cages. THESE NEED TO BE LAST THING RENDERED!
 	renderCages();
 
@@ -310,8 +306,8 @@ void Scene::initialiseOpenGL()
 {
 	//OpenGL settings
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	//glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
-	glClearColor(0, 0, 0, 1.0f);						// Black Background
+	glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
+	//glClearColor(0, 0, 0, 1.0f);						// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glClearStencil(0);									// Clear stencil buffer
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
@@ -906,16 +902,15 @@ void Scene::buildRealUniverse()
 	glDisable(GL_STENCIL_TEST);
 	glEnable(GL_BLEND);
 	glDisable(GL_LIGHTING);
-	//glEnable(GL_COLOR_MATERIAL);
 	
 	// Build a real world portal shape effect.
 	glPushMatrix();
-		glColor4f(0, 0.47f, 1.0f, 0.3f);
+		glColor4f(0, 0.4f, 0.7f, 0.3f);
 		buildStencilPortalShape();
 	glPopMatrix();
 
 	//glDisable(GL_COLOR_MATERIAL);
-	//glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 	glDisable(GL_BLEND);
 }
 
