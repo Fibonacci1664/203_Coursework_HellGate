@@ -166,47 +166,47 @@ void Camera::checkKeyboardInput(float dt)
 		moveDown(dt);
 	}
 
-	//if (input->isKeyDown('i'))
-	//{
-	//	// Look up.
-	//	lookUp(dt);
-	//	rotating = true;
-	//}
+	if (input->isKeyDown('i'))
+	{
+		// Look up.
+		lookUp(dt);
+		rotating = true;
+	}
 
-	//if (input->isKeyDown('k'))
-	//{
-	//	// Look down.
-	//	lookDown(dt);
-	//	rotating = true;
-	//}
+	if (input->isKeyDown('k'))
+	{
+		// Look down.
+		lookDown(dt);
+		rotating = true;
+	}
 
-	//if (input->isKeyDown('j'))
-	//{
-	//	// Look left.
-	//	lookLeft(dt);
-	//	rotating = true;
-	//}
+	if (input->isKeyDown('j'))
+	{
+		// Look left.
+		lookLeft(dt);
+		rotating = true;
+	}
 
-	//if (input->isKeyDown('l'))
-	//{
-	//	// Look right.
-	//	lookRight(dt);
-	//	rotating = true;
-	//}
+	if (input->isKeyDown('l'))
+	{
+		// Look right.
+		lookRight(dt);
+		rotating = true;
+	}
 
-	//if (input->isKeyDown('n'))
-	//{
-	//	// Tilt left.
-	//	rollLeft(dt);
-	//	rotating = true;
-	//}
+	if (input->isKeyDown('m'))
+	{
+		// Tilt left.
+		rollRight(dt);
+		rotating = true;
+	}
 
-	//if (input->isKeyDown('m'))
-	//{
-	//	// Tilt right.
-	//	rollRight(dt);
-	//	rotating = true;
-	//}
+	if (input->isKeyDown('n'))
+	{
+		// Tilt right.
+		rollLeft(dt);
+		rotating = true;
+	}
 }
 // END CHECK KEYBOARD INPUT FUNCTION.
 
@@ -373,14 +373,14 @@ void Camera::lookDown(float dt)
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-void Camera::rollLeft(float dt)
+void Camera::rollRight(float dt)
 {
 	roll -= (rotationSpeed * dt);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-void Camera::rollRight(float dt)
+void Camera::rollLeft(float dt)
 {
 	roll += (rotationSpeed * dt);
 }

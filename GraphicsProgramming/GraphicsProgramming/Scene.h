@@ -137,11 +137,19 @@ protected:
 	////////////////////////////////// SKYSPHERE STUFF ///////////////////////////////
 	// SKYSPHERE FUNCS
 	void initSkySphere();
+	void initHellSphere();
 	void renderSkySphere();
 	void renderSkySphere2();
+	void renderHellSphere();
+
 	
 	// SKYSPHERE VARS
 	SkySphere* skySphere;
+	SkySphere* hellSphere;
+
+	char* m_skySphereTexPath = "gfx/skyspheres/starmap_8k.jpg";
+	char* m_hellSkyTexPath = "gfx/textures/darkSun_2.png";
+
 
 	////////////////////////////////// SPHERE STUFF //////////////////////////////////
 	// PLANET STUFF
@@ -241,6 +249,7 @@ protected:
 	// PAGES FUNCS
 	void initPage();
 	void renderPages();
+	void clickMe();
 
 	// PAGES VARS
 	Page* page_1;
@@ -250,6 +259,10 @@ protected:
 	char* evilPage_1Path = "gfx/textures/evilPage_1.png";
 	char* evilPage_2Path = "gfx/textures/evilPage_2.jpg";
 	char* evilPage_3Path = "gfx/textures/evilPage_3.jpg";
+
+	bool inPlace;
+	bool hasClicked;
+	char clickMeText[40];
 
 	////////////////////////////////// LOADED MODEL STUFF /////////////////////////////
 

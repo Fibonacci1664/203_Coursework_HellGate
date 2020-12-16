@@ -38,6 +38,8 @@ Scene::Scene(Input *in)
 	motionCam = true;
 	m_wireFrame = false;
 	pageClicked = false;
+	inPlace = false;
+	hasClicked = false;
 	cameraZoom = 0;
 	cameraZoomSpeed = 50.0f;
 	m_planetRotation = 0;
@@ -47,6 +49,7 @@ Scene::Scene(Input *in)
 
 	initCamera();
 	initSkySphere();
+	initHellSphere();
 	initGround();
 	initPlanetarySystem();	
 	initCrate();
@@ -169,35 +172,42 @@ void Scene::handleInput(float dt)
 		motionCam = true;
 	}
 
-	if (input->isKeyDown('m'))
-	{
-		cameraZoom += cameraZoomSpeed * dt;
-	}
-
-	if (input->isKeyDown('n'))
+	if (input->isKeyDown('b'))
 	{
 		cameraZoom -= cameraZoomSpeed * dt;
 	}
 
+	if (input->isKeyDown('v'))
+	{
+		cameraZoom += cameraZoomSpeed * dt;
+	}
+
 	// This is for interactivity with the spell page and effect.
 	// Make sure the user is at the correct location.
-	if ((cam->getPos().x > 9.0f && cam->getPos().x < 11.0f) &&
+	if ((cam->getPos().x > 9.5f && cam->getPos().x < 11.0f) &&
 		(cam->getPos().y > 6.0f && cam->getPos().y < 8.0f) &&
 		(cam->getPos().z > 8.0f && cam->getPos().z < 10.0f))
 	{
 		// Make sure the user is looking the correct direction.
-		if ((cam->getLookAt().x > 9.5f && cam->getLookAt().x < 10.5f) &&
-			(cam->getLookAt().y > 5.5f && cam->getLookAt().y < 6.5f) &&
+		if ((cam->getLookAt().x > 9.0f && cam->getLookAt().x < 11.0f) &&
+			(cam->getLookAt().y > 5.6f && cam->getLookAt().y < 6.4f) &&
 			(cam->getLookAt().z > 9.0f && cam->getLookAt().z < 10.5f))
 		{
+			inPlace = true;
+
 			// If all the condtions above are satisfied, then we must have the cursor over the ritual page.
 			// If we click on it, start the spell effect.
 			if (input->isMouseLDown())
 			{
 				pageClicked = true;
+				hasClicked = true;
 			}
 		}
-	}
+		else
+		{
+			inPlace = false;
+		}
+	}	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,8 +265,10 @@ void Scene::render()
 	// Build real world.
 	buildRealUniverse();
 
+	// This renders a 500 radius skyshpere which the entire scene live inside, this causes no issues with stencil effect.
 	renderSkySphere2();
 
+	// This renders a unit radius skysphere around the camera but causes issues with the stencil effect.
 	//renderSkySphere();
 		
 	// Render a plane of cobble stone ground.
@@ -341,7 +353,14 @@ void Scene::initCamera()
 
 void Scene::initSkySphere()
 {
-	skySphere = new SkySphere(1, 50, 50);
+	skySphere = new SkySphere(1, 50, 50, m_skySphereTexPath);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+void Scene::initHellSphere()
+{
+	hellSphere = new SkySphere(1, 50, 50, m_hellSkyTexPath);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -360,6 +379,15 @@ void Scene::renderSkySphere2()
 {
 	glPushMatrix();
 		skySphere->render2();
+	glPopMatrix();
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+void Scene::renderHellSphere()
+{
+	glPushMatrix();
+		hellSphere->render2();
 	glPopMatrix();
 }
 
@@ -783,6 +811,13 @@ void Scene::renderPages()
 	glPopMatrix();
 }
 
+void Scene::clickMe()
+{
+	// Render click me message on screen.
+	sprintf_s(clickMeText, "%s", "CLICK ME!");
+	displayText(-0.03f, 0.02f, 1.f, 0.f, 0.f, clickMeText);
+}
+
 //////////////////////////////////////////////////////////// PAGES STUFF END //////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////// ALL LOADED MODEL STUFF ///////////////////////////////////////////////////
@@ -941,6 +976,7 @@ void Scene::buildStencil()
 
 void Scene::buildMirrorUniverse()
 {
+	renderHellSphere();
 	renderRockyLand();
 }
 
@@ -954,7 +990,7 @@ void Scene::buildRealUniverse()
 	
 	// Build a real world portal shape effect.
 	glPushMatrix();
-		glColor4f(0, 0.4f, 0.7f, 0.3f);
+		glColor4f(0, 0.2f, 0.4f, 0.3f);
 		buildStencilPortalShape();
 	glPopMatrix();
 
@@ -1144,6 +1180,11 @@ void Scene::renderTextOutput()
 	displayText(-1.f, 0.96f, 1.0f, 1.0f, 1.0f, mouseText);
 	displayText(-1.f, 0.90f, 1.0f, 1.0f, 1.0f, fps);
 	renderCameraPosText();
+
+	if (inPlace && !hasClicked)
+	{
+		clickMe();
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////

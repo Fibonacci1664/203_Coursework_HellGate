@@ -30,10 +30,10 @@ constexpr auto GL_CLAMP_TO_EDGE = 0x812F;
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 // CONSTRUCTOR.
-SkySphere::SkySphere(float radius, float slices, float stacks)
+SkySphere::SkySphere(float radius, float slices, float stacks, char* filepath)
 {
 	m_quadric = gluNewQuadric();
-	initSkySphere(radius, slices, stacks);
+	initSkySphere(radius, slices, stacks, filepath);
 	m_rotation = 0;
 	m_speed = 0.5f;
 }
@@ -85,9 +85,9 @@ void SkySphere::render2()
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-void SkySphere::initSkySphere(float radius, float slices, float stacks)
+void SkySphere::initSkySphere(float radius, float slices, float stacks, char* filepath)
 {
-	initTextures(m_skySphereTexPath);
+	initTextures(filepath);
 
 	m_sphereList = glGenLists(1);
 

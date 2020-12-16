@@ -43,8 +43,8 @@ public:
 	void lookRight(float dt);
 	void lookUp(float dt);
 	void lookDown(float dt);
-	void rollLeft(float dt);
 	void rollRight(float dt);
+	void rollLeft(float dt);
 
 	Vector3 getPos();
 	Vector3 getLookAt();

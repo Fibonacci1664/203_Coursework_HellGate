@@ -26,7 +26,7 @@
 class SkySphere
 {
 public:
-	SkySphere(float radius, float slices, float stacks);
+	SkySphere(float radius, float slices, float stacks, char* filepath);
 	~SkySphere();
 	
 	void update(float dt);
@@ -37,7 +37,7 @@ protected:
 
 private:
 
-	void initSkySphere(float radius, float slices, float stacks);
+	void initSkySphere(float radius, float slices, float stacks, char* filepath);
 	void initTextures(char* filepath);
 
 	GLuint m_sphereList;
@@ -48,7 +48,7 @@ private:
 
 	// TEXTURE VARS
 	GLuint m_texture;
-	char* m_skySphereTexPath = "gfx/skyspheres/starmap_8k.jpg";
+	//char* m_skySphereTexPath = "gfx/skyspheres/starmap_8k.jpg";
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////
