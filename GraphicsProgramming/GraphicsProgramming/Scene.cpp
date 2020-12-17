@@ -256,6 +256,9 @@ void Scene::render()
 	}
 		
 	// Render geometry/scene here -------------------------------------
+
+	// This renders a unit radius skysphere around the camera but causes issues with the stencil effect.
+	renderSkySphere();
 	// Build stencil for dragon portal.
 	buildStencil();
 	
@@ -266,10 +269,9 @@ void Scene::render()
 	buildRealUniverse();
 
 	// This renders a 500 radius skyshpere which the entire scene live inside, this causes no issues with stencil effect.
-	renderSkySphere2();
+	//renderSkySphere2();
 
-	// This renders a unit radius skysphere around the camera but causes issues with the stencil effect.
-	//renderSkySphere();
+	
 		
 	// Render a plane of cobble stone ground.
 	renderGround();
@@ -328,8 +330,8 @@ void Scene::initialiseOpenGL()
 {
 	//OpenGL settings
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
-	//glClearColor(0, 0, 0, 1.0f);						// Black Background
+	//glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
+	glClearColor(0, 0, 0, 1.0f);						// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glClearStencil(0);									// Clear stencil buffer
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
@@ -1067,7 +1069,7 @@ void Scene::toggleWireFrame()
 {
 	if (input->isKeyDown('p') && !m_wireFrame)
 	{
-		glPolygonMode(GL_FRONT, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		m_wireFrame = true;
 		input->setKeyUp('p');
 		brownDwarf->setWireFrameMode(true);
@@ -1081,7 +1083,7 @@ void Scene::toggleWireFrame()
 
 	if (input->isKeyDown('p') && m_wireFrame)
 	{
-		glPolygonMode(GL_FRONT, GL_FILL);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		m_wireFrame = false;
 		input->setKeyUp('p');
 		brownDwarf->setWireFrameMode(false);
