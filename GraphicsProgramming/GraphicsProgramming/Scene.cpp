@@ -415,12 +415,12 @@ void Scene::renderPlanetarySystem()
 		glRotatef(m_planetRotation / 2.0f, 0, 1.0f, 0);		
 		brownDwarf->render();
 
-		glPushMatrix();
+		glPushMatrix();												// Save brown dwarf origin.
 			brownDwarfPointLight_1.renderPointLight(GL_LIGHT0, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_1);
 			brownDwarfPointLight_2.renderPointLight(GL_LIGHT1, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_2);
 			brownDwarfPointLight_3.renderPointLight(GL_LIGHT2, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_3);
 			brownDwarfPointLight_4.renderPointLight(GL_LIGHT3, brownDwarfLightAmbient, brownDwarfLightDiffuse, brownDwarfLightPosition_4);
-		glPopMatrix();
+		glPopMatrix();												// Pop back to brown dwarf origin.
 
 		glPushMatrix();												// Save brown dwarf origin.
 			
@@ -924,13 +924,11 @@ void Scene::initRockyLand()
 
 void Scene::renderRockyLand()
 {
-	bool blendIsOn = glIsEnabled(GL_BLEND);
 	glPushMatrix();
 		glTranslatef(10.0f, 5.0f, 55.0f);
 		glScalef(0.75f, 0.75f, 0.75f);
 		rockyLand->render();
 	glPopMatrix();
-	blendIsOn = glIsEnabled(GL_BLEND);
 }
 
 //////////////////////////////////////////////////////////// STENCIL BUFFER STUFF /////////////////////////////////////////////////////
@@ -994,7 +992,6 @@ void Scene::buildRealUniverse()
 		buildStencilPortalShape();
 	glPopMatrix();
 
-	//glDisable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHTING);
 	glDisable(GL_BLEND);
 }

@@ -1,9 +1,9 @@
 /*
  * About this class
- *		- Cage object uses Vertex3f(...) to draw each face of a cuebe
+ *		- Cage object uses Vertex3f(...) to draw each face of a cube
  *		- There are 2 cubes drawn, one with the front face culled and
- *			the other with the back face culled. This ensure correctly
- *			drawn cages as the camera is roated around them.
+ *			the other with the back face culled. This ensures correctly
+ *			drawn cages as the camera is rotated around them.
  *		- This class loads its own textures and draws itself.
  *
  * Original @author D. Green.
